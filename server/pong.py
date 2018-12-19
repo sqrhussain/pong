@@ -11,8 +11,10 @@ import json
 width = 300
 height = 150
 ball = {
-    'x': 5,
-    'y': 5
+    'position': {
+        'x': 5,
+        'y': 5
+    }
 }
 paddle1 = {
     'y': 1
@@ -24,7 +26,7 @@ paddle2 = {
 
 async def game_loop():
     while True:
-        ball['y'] += 1
+        ball['position']['y'] += 1
         await asyncio.sleep(1)
 
 

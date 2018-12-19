@@ -1,4 +1,4 @@
-function GameView() {
+function GameView(model) {
 
   this.size = {w:300,h:150};
   this.padding = {w:5, h:5};
@@ -7,8 +7,7 @@ function GameView() {
   this.paddleSize = {w:10,h:40};
   this.ballRadius = 5;
 
-  this.model = Model();
-  this.model.setView(this);
+  this.model = model;
 
   this.ownPaddleX = this.padding.w;
   this.opponentPaddleX = this.size.w - this.padding.w - this.paddleSize.w;
