@@ -69,3 +69,17 @@ GameView.prototype.draw = function() {
 GameView.prototype.gameLoop = function() {
   this.draw();
 };
+
+GameView.prototype.ballHitWall = function() {
+
+  var vid = document.getElementById("WallSound");
+  vid.play();
+
+};
+
+GameView.prototype.ballHitPaddle = function() {
+
+  var vid = document.getElementById("PaddleSound");
+  vid.play();
+
+};
