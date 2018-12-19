@@ -1,0 +1,12 @@
+body {
+  background-color: black;
+  color: white;
+}
+
+.route {
+  display: none;
+}
+
+#game-route {
+  display: block;
+}
