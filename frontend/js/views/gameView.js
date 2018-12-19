@@ -68,6 +68,11 @@ GameView.prototype.draw = function() {
 
 GameView.prototype.gameLoop = function() {
   this.draw();
+
+  var self = this;
+  requestAnimationFrame(function () {
+    self.gameLoop();
+  });
 };
 
 GameView.prototype.ballHitWall = function() {
