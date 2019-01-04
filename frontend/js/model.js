@@ -11,12 +11,15 @@ Model.prototype.initWebsocket = function() {
 
   var self = this;
   this.gameServer.onmessage = function(event) {
-    console.log("recv: " + event.data);
+    console.log("model recv: " + event.data);
     msg = JSON.parse(event.data);
     // processor
     switch(msg.type){
     case "ball":
     	self.view.updateBallPosition(msg.position);
+    	break;
+    case "paddle":
+    	self.view.updatePaddleY(player,y)
     	break;
     // TODO process rest of the messages...
     default:
@@ -30,8 +33,8 @@ Model.prototype.setView = function(view) {
 }
 
 Model.prototype.send = function(message) {
-	console.log("send: " + msg)
-  	this.gameServer.send(message);
+	console.log("model send: " + message.stringify())
+  	this.gameServer.send(message.stringify());
 };
 
 Model.prototype.down = function() {
