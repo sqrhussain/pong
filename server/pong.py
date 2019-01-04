@@ -4,6 +4,8 @@ import datetime
 import random
 import json
 
+import database_adapter #Database
+
 # see: https://websockets.readthedocs.io/en/stable/index.html
 # https://7webpages.com/blog/writing-online-multiplayer-game-with-python-asyncio-getting-asynchronous/
 
