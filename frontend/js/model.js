@@ -2,6 +2,8 @@ function Model() {
   this.username = '';
   this.gameServer = null;
   this.view = null;
+  this.own = 0; // just fix that the player is always #0 on their own device (the paddle to the left)
+  this.opp = 1;
 
   this.initWebsocket();
 }
@@ -19,8 +21,17 @@ Model.prototype.initWebsocket = function() {
     	self.view.updateBallPosition(msg.position);
     	break;
     case "paddle":
-    	self.view.updatePaddleY(player,y)
+    	self.view.updatePaddleY(msg.player,msg.y)
     	break;
+    case "score":
+      self.view.updateScore(msg.score);
+      break;
+    case "gameStart":
+      // IDK??
+      break;
+    case "hit":
+      self.view.onHit(msg.hitObject)
+      break;
     // TODO process rest of the messages...
     default:
     	break;
