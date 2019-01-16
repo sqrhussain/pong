@@ -52,7 +52,7 @@ GameView.prototype.updateBallPosition = function(position) {
 
 // assume paddle position refers to the top left corner of the paddle
 GameView.prototype.updatePaddleY = function(player,y) {
-  this.paddle[player] = y;
+  this.paddle[player]['y'] = y;
 };
 
 GameView.prototype.updateScore = function(scorePair) {
