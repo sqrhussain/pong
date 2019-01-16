@@ -44,8 +44,8 @@ Model.prototype.setView = function(view) {
 }
 
 Model.prototype.send = function(message) {
-	console.log("model send: " + message.stringify())
-  	this.gameServer.send(message.stringify());
+	console.log("model send: " + JSON.stringify(message))
+  	this.gameServer.send(JSON.stringify(message));
 };
 
 Model.prototype.down = function() {
