@@ -1,9 +1,7 @@
 function gameRoute() {
 
   // init game view
-  var model = new Model();
-  var gameView = new GameView(model);
-  model.setView(gameView);
+  var gameController = new GameController();
 
 
   // todo: listen to server, send messages to game view
