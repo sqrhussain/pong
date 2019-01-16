@@ -29,15 +29,6 @@ function GameView(model) {
     self.gameLoop();
   });
 
-
-  document.addEventListener("keydown",function(event){
-    if(event.keyCode == 38){ // up
-      self.model.up();
-    } else if(event.keyCode == 40){// down
-      self.model.down();
-    }
-  });
-
 }
 
 GameView.prototype.cleanCanvas = function() {
