@@ -22,7 +22,8 @@ function GameView(model) {
   this.score = [0,0];
 
   this.canvas = document.getElementById('game-canvas').getContext('2d');
-
+  this.score0 = document.getElementById('score0');
+  this.score1 = document.getElementById('score1');
 
   var self = this;
   requestAnimationFrame(function () {
@@ -68,6 +69,8 @@ GameView.prototype.drawPaddle = function(position) {
 GameView.prototype.drawScore = function(){
   // TODO plot score on canvas. Change canvas size and boundaries before.
   // may also have two other divs in which we plot scores
+  score0.innerHTML = this.score[0];
+  score1.innerHTML = this.score[1];
 };
 
 GameView.prototype.onHit = function(hitObject){

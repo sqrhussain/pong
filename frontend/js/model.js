@@ -1,3 +1,4 @@
+// listen to server, send messages to game view
 function Model() {
   this.username = '';
   this.gameServer = null;

@@ -1,4 +1,6 @@
+// listen for inputs from view and send to model
 function GameController(){
+
 
 
   var model = new Model();
