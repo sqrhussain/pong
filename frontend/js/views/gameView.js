@@ -75,7 +75,12 @@ GameView.prototype.drawScore = function(){
 
 GameView.prototype.onHit = function(hitObject){
   // TODO make noise according to the hit object ("wall"/"paddle");
-
+   if(hitObject == "wall")
+   {
+     ballHitWall();
+   }
+   else
+   ballHitPaddle();
 };
 
 
