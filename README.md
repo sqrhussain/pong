@@ -28,3 +28,5 @@ Requires at least python 3.6
 In the folder `server`:
 
 Run `pip3 install -r server/requirements.txt` to install requirements and run `python3 pong.py` to run the server.
+
+{{md  protocol.md }} 

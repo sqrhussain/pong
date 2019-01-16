@@ -7,22 +7,37 @@ function GameView(model) {
   this.paddleSize = {w:10,h:40};
   this.ballRadius = 5;
 
+
   this.model = model;
 
-  this.ownPaddleX = this.padding.w;
-  this.opponentPaddleX = this.size.w - this.padding.w - this.paddleSize.w;
+  this.paddleX = [this.padding.w,this.size.w - this.padding.w - this.paddleSize.w];
 
-  // should be controlled by model
-  this.ownPaddlePosition = {x:this.ownPaddleX, y:75};
-  this.opponentPaddlePosition = {x:this.opponentPaddleX, y:25};
+  // to be controlled by model
+  this.paddle = [{x:this.paddleX[0],
+                  y:25/*dummy val*/},
+                 {x:this.paddleX[1],
+                  y:75/*dummy val*/}
+                ];
   this.ballPosition = {x: 200, y: 60};
+  this.score = [0,0];
 
   this.canvas = document.getElementById('game-canvas').getContext('2d');
+
 
   var self = this;
   requestAnimationFrame(function () {
     self.gameLoop();
   });
+
+
+  document.addEventListener("keydown",function(event){
+    if(event.keyCode == 38){ // up
+      self.model.up();
+    } else if(event.keyCode == 40){// down
+      self.model.down();
+    }
+  });
+
 }
 
 GameView.prototype.cleanCanvas = function() {
@@ -36,11 +51,12 @@ GameView.prototype.updateBallPosition = function(position) {
 };
 
 // assume paddle position refers to the top left corner of the paddle
-GameView.prototype.updateOwnPaddleY = function(y) {
-  this.ownPaddlePosition.y = y;
+GameView.prototype.updatePaddleY = function(player,y) {
+  this.paddle[player] = y;
 };
-GameView.prototype.updateOpponentPaddleY = function(y) {
-  this.opponentPaddlePosition.y = y;
+
+GameView.prototype.updateScore = function(scorePair) {
+  this.score = scorePair;
 };
 
 GameView.prototype.drawBall = function(position) {
@@ -58,16 +74,32 @@ GameView.prototype.drawPaddle = function(position) {
   this.canvas.fillRect(position.x, position.y, this.paddleSize.w, this.paddleSize.h);
 };
 
+GameView.prototype.drawScore = function(){
+  // TODO plot score on canvas. Change canvas size and boundaries before.
+  // may also have two other divs in which we plot scores
+};
+
+GameView.prototype.onHit = function(hitObject){
+  // TODO make noise according to the hit object ("wall"/"paddle");
+
+};
+
 
 GameView.prototype.draw = function() {
   this.cleanCanvas();
   this.drawBall(this.ballPosition);
-  this.drawPaddle(this.ownPaddlePosition);
-  this.drawPaddle(this.opponentPaddlePosition);
+  this.drawPaddle(this.paddle[0]);
+  this.drawPaddle(this.paddle[1]);
+  this.drawScore();
 };
 
 GameView.prototype.gameLoop = function() {
   this.draw();
+
+  var self = this;
+  requestAnimationFrame(function () {
+    self.gameLoop();
+  });
 };
 
 GameView.prototype.ballHitWall = function() {
