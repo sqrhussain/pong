@@ -35,15 +35,16 @@ async def game_loop():
 def ball_event():
     return json.dumps({'type': 'ball', **ball})
 
-def paddle_event(player,y):
-	return json.dumps({'type': 'paddle', 'player' : player, 'y' : y})
+
+def paddle_event(player, y):
+    return json.dumps({'type': 'paddle', 'player': player, 'y': y})
+
 
 async def message_loop(websocket, path):
-	while True:
-		msg = await websocket.recv()
-		print(msg)
+    while True:
+        msg = await websocket.recv()
+        print(msg)
  
-
 
 start_server = websockets.serve(message_loop, 'localhost', 8765)
 all_tasks = asyncio.gather(game_loop(), start_server)
