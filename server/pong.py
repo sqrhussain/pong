@@ -29,8 +29,9 @@ ballRadius = 20
 paddleStep = 20
 ball = {
     'position': Vec2d(5, 5),
-    'velocity': Vec2d(50, 100)
+    'velocity': Vec2d(100, 200)
 }
+velocity_increase = 0.05
 paddles = [
     {'y': 1},
     {'y': 1}
@@ -65,11 +66,13 @@ async def game_loop():
                 new_position.y < paddles[1]['y'] + paddleSize['h'] + ballRadius:
             new_position.x = ball_paddle_max_x
             ball['velocity'].x = -ball['velocity'].x
+            ball['velocity'] += ball['velocity'] * velocity_increase
         elif new_position.x < ball_paddle_min_x and new_position.x > 0 and \
                 new_position.y > paddles[0]['y'] - ballRadius and \
                 new_position.y < paddles[0]['y'] + paddleSize['h'] + ballRadius:
             new_position.x = ball_paddle_min_x
             ball['velocity'].x = -ball['velocity'].x
+            ball['velocity'] += ball['velocity'] * velocity_increase
 
         # todo: send event to play sound
         if new_position.y < ball_min_y:
