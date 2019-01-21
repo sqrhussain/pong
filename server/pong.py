@@ -30,20 +30,23 @@ paddles = [
     {'y': 1},
     {'y': 1}
 ]
+ball_min_y = (ballRadius / 2)
+ball_max_y = height - (ballRadius / 2)
+paddle_min_y = 0
+paddle_max_y = height - paddleSize['h']
 
 
 async def game_loop():
     while True:
         new_position = ball['position'] + ball['velocity']
-        min_y = (ballRadius / 2)
-        max_y = height - (ballRadius / 2)
-        if new_position.y < min_y:
+        # todo: send event to play sound
+        if new_position.y < ball_min_y:
             # todo: make this more precise.
-            new_position.y = min_y
+            new_position.y = ball_min_y
             ball['velocity'].y = -ball['velocity'].y
-        elif new_position.y > max_y:
+        elif new_position.y > ball_max_y:
             # todo: make this more precise.
-            new_position.y = max_y
+            new_position.y = ball_max_y
             ball['velocity'].y = -ball['velocity'].y
         ball['position'] = new_position
         await asyncio.sleep(0.1)
@@ -60,14 +63,13 @@ def paddle_event(player):
 def move_paddle(player, direction):
     if direction == 'up':
         new_y = paddles[player]['y'] - paddleStep
-        if new_y < 0:
-            new_y = 0
+        if new_y < paddle_min_y:
+            new_y = paddle_min_y
         paddles[player]['y'] = new_y
     if direction == 'down':
         new_y = paddles[player]['y'] + paddleStep
-        max_paddle_y = height - paddleSize['h']
-        if new_y > max_paddle_y:
-            new_y = max_paddle_y
+        if new_y > paddle_max_y:
+            new_y = paddle_max_y
         paddles[player]['y'] = new_y
 
 
