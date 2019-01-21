@@ -1,11 +1,11 @@
 function GameView(model) {
 
-  this.size = {w:300,h:150};
-  this.padding = {w:5, h:5};
+  this.size = {w: 1080,h: 720};
+  this.padding = {w: 5, h: 5};
 
 
-  this.paddleSize = {w:10,h:40};
-  this.ballRadius = 5;
+  this.paddleSize = {w: 20,h: 160};
+  this.ballRadius = 20;
 
 
   this.model = model;
@@ -19,12 +19,22 @@ function GameView(model) {
                   y:75/*dummy val*/}
                 ];
   this.ballPosition = {x: 200, y: 60};
+  this.ballPositionServer = {x: 200, y: 60};
+  this.ballVelocityServer = {x: 5, y: 10};
   this.score = [0,0];
 
   this.canvas = document.getElementById('game-canvas').getContext('2d');
-  this.score0 = document.getElementById('score0');
-  this.score1 = document.getElementById('score1');
+  document.getElementById('game-canvas')
+      .setAttribute('width', this.size.w);
+  document.getElementById('game-canvas')
+      .setAttribute('height', this.size.h);
 
+
+  this.fps = 15;
+  this.now;
+  this.then = Date.now();
+  this.interval = 1000 / this.fps;
+  this.delta;
   var self = this;
   requestAnimationFrame(function () {
     self.gameLoop();
@@ -33,18 +43,20 @@ function GameView(model) {
 }
 
 GameView.prototype.cleanCanvas = function() {
-  this.canvas.fillStyle = 'grey'; // TEMPORARILY: just to see the borders
+  this.canvas.fillStyle = 'red'; // TEMPORARILY: just to see the borders
   this.canvas.fillRect(0, 0, this.size.w, this.size.h);
 };
 
 
-GameView.prototype.updateBallPosition = function(position) {
+GameView.prototype.updateBallPosition = function(position, velocity) {
+  this.ballPositionServer = position;
+  this.ballVelocityServer = velocity;
   this.ballPosition = position;
 };
 
 // assume paddle position refers to the top left corner of the paddle
 GameView.prototype.updatePaddleY = function(player,y) {
-  this.paddle[player] = y;
+  this.paddle[player]['y'] = y;
 };
 
 GameView.prototype.updateScore = function(scorePair) {
@@ -67,10 +79,19 @@ GameView.prototype.drawPaddle = function(position) {
 };
 
 GameView.prototype.drawScore = function(){
-  // TODO plot score on canvas. Change canvas size and boundaries before.
-  // may also have two other divs in which we plot scores
-  score0.innerHTML = this.score[0];
-  score1.innerHTML = this.score[1];
+  // TODO Change canvas size and boundaries before.
+
+  this.cleanCanvas();
+  var element = document.getElementById("StartButton");
+  var fontproperty = window.getComputedStyle(element, null).getPropertyValue("font-family");
+
+  this.score[0]
+  var highscoretext = this.score[0].toString(10) + " : " + this.score[1].toString(10);
+
+  this.canvas.textBaseline = "middle";
+  this.canvas.textAlign = "center";
+  this.canvas.font = fontproperty;
+  this.canvas.fillText(highscoretext, 10, 50);
 };
 
 GameView.prototype.onHit = function(hitObject){
@@ -83,8 +104,12 @@ GameView.prototype.onHit = function(hitObject){
    ballHitPaddle();
 };
 
+GameView.prototype.update = function(delta) {
+  this.ballPosition.x = this.ballPositionServer.x + (this.ballVelocityServer.x * delta / 1000);
+  this.ballPosition.y = this.ballPositionServer.y + (this.ballVelocityServer.y * delta / 1000);
+};
 
-GameView.prototype.draw = function() {
+GameView.prototype.draw = function(delta) {
   this.cleanCanvas();
   this.drawBall(this.ballPosition);
   this.drawPaddle(this.paddle[0]);
@@ -93,12 +118,19 @@ GameView.prototype.draw = function() {
 };
 
 GameView.prototype.gameLoop = function() {
-  this.draw();
-
   var self = this;
   requestAnimationFrame(function () {
     self.gameLoop();
   });
+
+  this.now = Date.now();
+  this.delta = this.now - this.then;
+
+  if (this.delta > this.interval) {
+    this.then = this.now - (this.delta % this.interval);
+    this.update(this.delta);
+    this.draw(this.delta);
+  }
 };
 
 GameView.prototype.ballHitWall = function() {
