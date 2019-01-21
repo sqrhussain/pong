@@ -10,8 +10,11 @@ import database_adapter #Database
 # https://7webpages.com/blog/writing-online-multiplayer-game-with-python-asyncio-getting-asynchronous/
 
 
-width = 300
-height = 150
+width = 1080
+height = 720
+paddleSize = {'w': 20, 'h': 160}
+ballRadius = 20
+
 paddleStep = 20
 ball = {
     'position': {
@@ -40,15 +43,26 @@ def paddle_event(player):
     return json.dumps({'type': 'paddle', 'player': player, **paddles[player]})
 
 
+def move_paddle(player, direction):
+    if direction == 'up':
+        new_y = paddles[player]['y'] - paddleStep
+        if new_y < 0:
+            new_y = 0
+        paddles[player]['y'] = new_y
+    if direction == 'down':
+        new_y = paddles[player]['y'] + paddleStep
+        max_paddle_y = height - paddleSize['h']
+        if new_y > max_paddle_y:
+            new_y = max_paddle_y
+        paddles[player]['y'] = new_y
+
+
 async def consumer(websocket, message):
     msg_obj = json.loads(message)
     if msg_obj['type'] == 'move':
-        if msg_obj['direction'] == 'up':
-            paddles[0]['y'] -= paddleStep
-        if msg_obj['direction'] == 'down':
-            paddles[0]['y'] += paddleStep
-        await websocket.send(paddle_event(0))
-        await websocket.send(paddle_event(1))
+        player = 0
+        move_paddle(player, msg_obj['direction'])
+        await websocket.send(paddle_event(player))
 
 
 async def consumer_handler(websocket, path):
@@ -62,6 +76,7 @@ async def producer_handler(websocket, path):
         await websocket.send(ball_event())
         await asyncio.sleep(0.5)
 
+# todo: on first connect send paddle positions
 
 async def handler(websocket, path):
     consumer_task = asyncio.ensure_future(
