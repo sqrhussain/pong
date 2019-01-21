@@ -10,12 +10,14 @@
   </head>
   <body>
     <div id="start-route" class="route">
-      <h1>Welcome! You wanna play an awesome game of Pong?</h1>
-      <p>start-route</p>
+      <audio id="StartSound">
+      <source src="audio/start.mp3" type="audio/mp3">
+    </audio>
+      <h1>P o n g</h1>
+      <p>Wanna play a game?</p>
 
-      <!--<a href="#play">Start game!</a>-->
       <form>
-       Username:<br>
+       Playername:<br>
        <input type="text" name="username"><br>
       </form>
       <br>
@@ -28,8 +30,6 @@
       </script>
     </div>
     <div id="game-route" class="route">
-      <h1>Pong</h1>
-      <p>start-route</p>
       <canvas id="game-canvas"></canvas>
 
       <button id="EndButton" class="float-left submit-button" >End Game!</button>
@@ -45,15 +45,31 @@
       <h1>Pong</h1>
       <p>game-end-route</p>
 
+      <button id="HighScoreButton" class="float-left submit-button">Go to highscore!</button>
 
-      <a href="#highscore">Go to highscore!</a><br />
-      <a href="#">Go to start page!</a>
+      <script type="text/javascript">
+       document.getElementById("HighScoreButton").onclick = function () {
+       location.href = "#highscore";
+        };
+      </script>
+            <button id="StartEndButton" class="float-left submit-button" >Go to Start Page!</button>
+
+      <script type="text/javascript">
+       document.getElementById("StartEndButton").onclick = function () {
+       location.href = "#";
+        };
+      </script>
     </div>
     <div id="highscore-route" class="route">
-      <h1>Pong</h1>
+      <h1>Highscore</h1>
       <p>highscore-route</p>
+            <button id="StartEndHighscoreButton" class="float-left submit-button" >Go to Start Page!</button>
 
-      <a href="#">Go to start page!</a>
+      <script type="text/javascript">
+       document.getElementById("StartEndHighscoreButton").onclick = function () {
+       location.href = "#";
+        };
+      </script>
     </div>
 
 

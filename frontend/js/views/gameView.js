@@ -32,7 +32,7 @@ function GameView(model) {
 }
 
 GameView.prototype.cleanCanvas = function() {
-  this.canvas.fillStyle = 'grey'; // TEMPORARILY: just to see the borders
+  this.canvas.fillStyle = 'red'; // TEMPORARILY: just to see the borders
   this.canvas.fillRect(0, 0, this.size.w, this.size.h);
 };
 
