@@ -18,7 +18,7 @@ Model.prototype.initWebsocket = function() {
     // processor
     switch(msg.type){
     case "ball":
-    	self.view.updateBallPosition(msg.position);
+    	self.view.updateBallPosition(msg.position, msg.velocity);
     	break;
     case "paddle":
     	self.view.updatePaddleY(msg.player,msg.y)

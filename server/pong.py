@@ -1,6 +1,7 @@
 import asyncio
 import websockets
 import json
+import time
 
 # see: https://websockets.readthedocs.io/en/stable/index.html
 # https://7webpages.com/blog/writing-online-multiplayer-game-with-python-asyncio-getting-asynchronous/
@@ -15,6 +16,9 @@ class Vec2d:
     def __add__(self, other):
         return Vec2d(self.x + other.x, self.y + other.y)
 
+    def __mul__(self, other):
+        return Vec2d(self.x * other, self.y * other)
+
 
 width = 1080
 height = 720
@@ -25,7 +29,7 @@ ballRadius = 20
 paddleStep = 20
 ball = {
     'position': Vec2d(5, 5),
-    'velocity': Vec2d(5, 10)
+    'velocity': Vec2d(50, 100)
 }
 paddles = [
     {'y': 1},
@@ -37,11 +41,17 @@ ball_paddle_min_x = paddleSize['w'] + padding['w'] + ballRadius
 ball_paddle_max_x = width - paddleSize['w'] - padding['w'] - ballRadius
 paddle_min_y = 0
 paddle_max_y = height - paddleSize['h']
+FPS = 30
 
 
 async def game_loop():
+    last_frame_time = time.time()
     while True:
-        new_position = ball['position'] + ball['velocity']
+        current_time = time.time()
+        delta_time = current_time - last_frame_time
+        last_frame_time = current_time
+
+        new_position = ball['position'] + (ball['velocity'] * delta_time)
         # todo: send event to play sound
         if new_position.y < ball_min_y:
             # todo: make this more precise.
@@ -59,7 +69,10 @@ async def game_loop():
             new_position.x = ball_paddle_min_x
             ball['velocity'].x = -ball['velocity'].x
         ball['position'] = new_position
-        await asyncio.sleep(0.1)
+
+        sleep_time = 1. / FPS - (current_time - last_frame_time)
+        if sleep_time > 0:
+            await asyncio.sleep(sleep_time)
 
 
 def ball_event():
@@ -100,7 +113,7 @@ async def consumer_handler(websocket, path):
 async def producer_handler(websocket, path):
     while True:
         await websocket.send(ball_event())
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.1)
 
 
 # todo: on first connect send paddle positions
