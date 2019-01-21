@@ -12,7 +12,7 @@ import database_adapter #Database
 
 width = 300
 height = 150
-paddleStep = 5
+paddleStep = 20
 ball = {
     'position': {
         'x': 5,
@@ -27,8 +27,8 @@ paddles = [
 
 async def game_loop():
     while True:
-        ball['position']['x'] += 1
-        ball['position']['y'] += 1
+        ball['position']['x'] += 5
+        ball['position']['y'] += 5
         await asyncio.sleep(0.1)
 
 

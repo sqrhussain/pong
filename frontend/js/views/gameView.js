@@ -1,11 +1,11 @@
 function GameView(model) {
 
-  this.size = {w:300,h:150};
-  this.padding = {w:5, h:5};
+  this.size = {w: 1080,h: 720};
+  this.padding = {w: 5, h: 5};
 
 
-  this.paddleSize = {w:10,h:40};
-  this.ballRadius = 5;
+  this.paddleSize = {w: 20,h: 160};
+  this.ballRadius = 20;
 
 
   this.model = model;
@@ -22,6 +22,10 @@ function GameView(model) {
   this.score = [0,0];
 
   this.canvas = document.getElementById('game-canvas').getContext('2d');
+  document.getElementById('game-canvas')
+      .setAttribute('width', this.size.w);
+  document.getElementById('game-canvas')
+      .setAttribute('height', this.size.h);
 
 
   var self = this;
