@@ -12,24 +12,24 @@ import database_adapter #Database
 
 width = 300
 height = 150
+paddleStep = 5
 ball = {
     'position': {
         'x': 5,
         'y': 5
     }
 }
-paddle1 = {
-    'y': 1
-}
-paddle2 = {
-    'y': 1
-}
+paddles = [
+    {'y': 1},
+    {'y': 1}
+]
 
 
 async def game_loop():
     while True:
+        ball['position']['x'] += 1
         ball['position']['y'] += 1
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.1)
 
 
 def ball_event():
@@ -37,35 +37,30 @@ def ball_event():
 
 
 def paddle_event(player):
-    #return json.dumps({'type': 'paddle', 'player': player, 'y': y})
-    return json.dumps({'type': 'paddle', 'player': player, **paddle1});
+    return json.dumps({'type': 'paddle', 'player': player, **paddles[player]})
 
 
-async def consumer(message):
+async def consumer(websocket, message):
     msg_obj = json.loads(message)
     if msg_obj['type'] == 'move':
-        print('move msg!')
         if msg_obj['direction'] == 'up':
-            paddle1['y'] -= 1
+            paddles[0]['y'] -= paddleStep
         if msg_obj['direction'] == 'down':
-            paddle1['y'] += 1
-
-
-async def producer():
-    await asyncio.sleep(1)
-    return paddle_event(1)
+            paddles[0]['y'] += paddleStep
+        await websocket.send(paddle_event(0))
+        await websocket.send(paddle_event(1))
 
 
 async def consumer_handler(websocket, path):
     while True:
         message = await websocket.recv()
-        await consumer(message)
+        await consumer(websocket, message)
 
 
 async def producer_handler(websocket, path):
     while True:
-        message = await producer()
-        await websocket.send(message)
+        await websocket.send(ball_event())
+        await asyncio.sleep(0.5)
 
 
 async def handler(websocket, path):
