@@ -1,13 +1,19 @@
 import asyncio
 import websockets
-import datetime
-import random
 import json
-
-import database_adapter #Database
 
 # see: https://websockets.readthedocs.io/en/stable/index.html
 # https://7webpages.com/blog/writing-online-multiplayer-game-with-python-asyncio-getting-asynchronous/
+
+
+# todo: move to module
+class Vec2d:
+    def __init__(self, x=0, y=0):
+        self.x = float(x)
+        self.y = float(y)
+
+    def __add__(self, other):
+        return Vec2d(self.x + other.x, self.y + other.y)
 
 
 width = 1080
@@ -17,10 +23,8 @@ ballRadius = 20
 
 paddleStep = 20
 ball = {
-    'position': {
-        'x': 5,
-        'y': 5
-    }
+    'position': Vec2d(5, 5),
+    'velocity': Vec2d(1, 5)
 }
 paddles = [
     {'y': 1},
@@ -30,13 +34,23 @@ paddles = [
 
 async def game_loop():
     while True:
-        ball['position']['x'] += 5
-        ball['position']['y'] += 5
+        new_position = ball['position'] + ball['velocity']
+        min_y = (ballRadius / 2)
+        max_y = height - (ballRadius / 2)
+        if new_position.y < min_y:
+            # todo: make this more precise.
+            new_position.y = min_y
+            ball['velocity'].y = -ball['velocity'].y
+        elif new_position.y > max_y:
+            # todo: make this more precise.
+            new_position.y = max_y
+            ball['velocity'].y = -ball['velocity'].y
+        ball['position'] = new_position
         await asyncio.sleep(0.1)
 
 
 def ball_event():
-    return json.dumps({'type': 'ball', **ball})
+    return json.dumps({'type': 'ball', 'position': ball['position'].__dict__, 'velocity': ball['velocity'].__dict__})
 
 
 def paddle_event(player):
@@ -76,8 +90,8 @@ async def producer_handler(websocket, path):
         await websocket.send(ball_event())
         await asyncio.sleep(0.5)
 
-# todo: on first connect send paddle positions
 
+# todo: on first connect send paddle positions
 async def handler(websocket, path):
     consumer_task = asyncio.ensure_future(
         consumer_handler(websocket, path))
@@ -89,10 +103,11 @@ async def handler(websocket, path):
     )
     for task in pending:
         task.cancel()
- 
 
-start_server = websockets.serve(handler, 'localhost', 8765)
-all_tasks = asyncio.gather(game_loop(), start_server)
 
-asyncio.get_event_loop().run_until_complete(all_tasks)
-asyncio.get_event_loop().run_forever()
+if __name__ == "__main__":
+    start_server = websockets.serve(handler, 'localhost', 8765)
+    all_tasks = asyncio.gather(game_loop(), start_server)
+
+    asyncio.get_event_loop().run_until_complete(all_tasks)
+    asyncio.get_event_loop().run_forever()
