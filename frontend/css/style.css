@@ -39,7 +39,7 @@ button {color: black;
 #game-route {
   display: block;
 }
-canvas {width: 100%;
-        height: 500px;
-        vertical-align: middle;
+canvas {
+    width: 100%;
+    vertical-align: middle;
 }
