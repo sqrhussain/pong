@@ -79,8 +79,19 @@ GameView.prototype.drawPaddle = function(position) {
 };
 
 GameView.prototype.drawScore = function(){
-  // TODO plot score on canvas. Change canvas size and boundaries before.
-  // may also have two other divs in which we plot scores
+  // TODO Change canvas size and boundaries before.
+
+  this.cleanCanvas();
+  var element = document.getElementById("StartButton");
+  var fontproperty = window.getComputedStyle(element, null).getPropertyValue("font-family");
+
+  this.score[0]
+  var highscoretext = this.score[0].toString(10) + " : " + this.score[1].toString(10);
+
+  this.canvas.textBaseline = "middle";
+  this.canvas.textAlign = "center";
+  this.canvas.font = fontproperty;
+  this.canvas.fillText(highscoretext, 10, 50);
 };
 
 GameView.prototype.onHit = function(hitObject){
