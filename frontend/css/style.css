@@ -20,7 +20,7 @@ body {
   background-color: black;
   color: white;
 }
-h1   {color: white;
+h1   {color: red;
         font-family: Arcade Classic;
         font-size: 180px;
         width: 100%;
@@ -30,7 +30,7 @@ h1   {color: white;
         text-align: center;
 }
 
-p    {color: white;
+p    {color: red;
         animation: move 10s infinite alternate ease-in-out;
         font-family: Arcade Classic;
         font-size: 60px;
@@ -40,14 +40,14 @@ p    {color: white;
         line-height: 200px;
  }
 
-form    {color: white;
+form    {color: red;
         font-family: Arcade Classic;
         margin: auto;
         text-align: center;
         display: block;
         font-size: 28px;}
 
-button {color: grey;
+button {color: red;
         border-radius: 8px;
         font-family: Arcade Classic;
         margin: auto;

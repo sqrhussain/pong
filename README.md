@@ -30,3 +30,9 @@ In the folder `server`:
 Run `pip3 install -r server/requirements.txt` to install requirements and run `python3 pong.py` to run the server.
 
 {{md  protocol.md }} 
+
+------------------
+Audio files from: freemusicarchive.org
+                  https://freesound.org
+
+Fonts files from: https://www.1001fonts.com/arcadeclassic-font.html

@@ -22,6 +22,7 @@ function GameView(model) {
   this.ballPositionServer = {x: 200, y: 60};
   this.ballVelocityServer = {x: 5, y: 10};
   this.score = [0,0];
+  this.player = ["Player 1", "Player 2"];
 
   this.canvas = document.getElementById('game-canvas').getContext('2d');
   document.getElementById('game-canvas')
@@ -79,21 +80,31 @@ GameView.prototype.drawPaddle = function(position) {
 };
 
 GameView.prototype.drawScore = function(){
-  // TODO Change canvas size and boundaries before.
+  // may also have two other divs in which we plot scores
+  //score 1
+  this.canvas.textAlign = "end";
+  this.canvas.fillText(this.score[0], 520, 50);
+  //score 2
+  this.canvas.textAlign = "start";
+  this.canvas.fillText(this.score[1], 560, 50);
+  this.canvas.font = "70px Arcade Classic";
 
-  this.cleanCanvas();
-  var element = document.getElementById("StartButton");
-  var fontproperty = window.getComputedStyle(element, null).getPropertyValue("font-family");
-
-  this.score[0]
-  var highscoretext = this.score[0].toString(10) + " : " + this.score[1].toString(10);
-
-  this.canvas.textBaseline = "middle";
-  this.canvas.textAlign = "center";
-  this.canvas.font = fontproperty;
-  this.canvas.fillText(highscoretext, 10, 50);
+};
+GameView.prototype.drawPlayer = function(){
+  this.canvas.font = "50px Arcade Classic";
+  //player 1
+    this.canvas.textAlign = "end";
+    this.canvas.fillText(this.player[0], 400, 50);
+      //player 2
+    this.canvas.textAlign = "start";
+    this.canvas.fillText(this.player[1], 680, 50);
 };
 
+GameView.prototype.drawLine = function(){
+  this.canvas.moveTo(540, 0);
+  this.canvas.lineTo(540, 720);
+  this.canvas.stroke();
+};
 GameView.prototype.onHit = function(hitObject){
   // TODO make noise according to the hit object ("wall"/"paddle");
    if(hitObject == "wall")
@@ -115,6 +126,8 @@ GameView.prototype.draw = function(delta) {
   this.drawPaddle(this.paddle[0]);
   this.drawPaddle(this.paddle[1]);
   this.drawScore();
+  this.drawPlayer();
+  this.drawLine();
 };
 
 GameView.prototype.gameLoop = function() {

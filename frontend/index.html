@@ -37,11 +37,15 @@
        location.href = "#end";
         };
       </script>
-      <!--<a href="#end">End game!</a>-->
+
     </div>
     <div id="game-end-route" class="route">
       <h1>Pong</h1>
       <p>game-end-route</p>
+
+      <h1 id="Win">You won!</h1>
+      <h1 id="Lose">You lost!</h1>
+      <p>Have a nice Day!</p>
 
       <button id="HighScoreButton" class="float-left submit-button">Go to highscore!</button>
 
@@ -69,18 +73,6 @@
         };
       </script>
     </div>
-
-
-    <script src="js/config.js"></script>
-    <script src="js/model.js"></script>
-    <script src="js/views/gameView.js"></script>
-    <script src="js/controller.js"></script>
-    <script src="js/routes/startRoute.js"></script>
-    <script src="js/routes/gameRoute.js"></script>
-    <script src="js/routes/gameEndRoute.js"></script>
-    <script src="js/routes/highscoreRoute.js"></script>
-    <script src="js/router.js"></script>
-    <script src="js/app.js"></script>
     <audio id="WallSound">
       <source src="audio/WallSound.wav" type="audio/mp3">
     </audio>
@@ -93,5 +85,17 @@
         <audio id="StartSound">
       <source src="audio/start.mp3" type="audio/mp3">
     </audio>
+
+    <script src="js/config.js"></script>
+    <script src="js/model.js"></script>
+    <script src="js/views/gameView.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/routes/startRoute.js"></script>
+    <script src="js/routes/gameRoute.js"></script>
+    <script src="js/routes/gameEndRoute.js"></script>
+    <script src="js/routes/highscoreRoute.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/app.js"></script>
+
   </body>
 </html>
