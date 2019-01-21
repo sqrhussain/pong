@@ -18,20 +18,23 @@ class Vec2d:
 
 width = 1080
 height = 720
+padding = {'w': 5, 'h': 5}
 paddleSize = {'w': 20, 'h': 160}
 ballRadius = 20
 
 paddleStep = 20
 ball = {
     'position': Vec2d(5, 5),
-    'velocity': Vec2d(1, 5)
+    'velocity': Vec2d(5, 10)
 }
 paddles = [
     {'y': 1},
     {'y': 1}
 ]
-ball_min_y = (ballRadius / 2)
-ball_max_y = height - (ballRadius / 2)
+ball_min_y = ballRadius
+ball_max_y = height - ballRadius
+ball_paddle_min_x = paddleSize['w'] + padding['w'] + ballRadius
+ball_paddle_max_x = width - paddleSize['w'] - padding['w'] - ballRadius
 paddle_min_y = 0
 paddle_max_y = height - paddleSize['h']
 
@@ -48,6 +51,13 @@ async def game_loop():
             # todo: make this more precise.
             new_position.y = ball_max_y
             ball['velocity'].y = -ball['velocity'].y
+        # todo: check if paddle is there or not
+        if new_position.x > ball_paddle_max_x:
+            new_position.x = ball_paddle_max_x
+            ball['velocity'].x = -ball['velocity'].x
+        elif new_position.x < ball_paddle_min_x:
+            new_position.x = ball_paddle_min_x
+            ball['velocity'].x = -ball['velocity'].x
         ball['position'] = new_position
         await asyncio.sleep(0.1)
 
