@@ -9,7 +9,7 @@ import time
 
 # todo: move to module
 class Vec2d:
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0., y=0.):
         self.x = float(x)
         self.y = float(y)
 
@@ -20,8 +20,8 @@ class Vec2d:
         return Vec2d(self.x * other, self.y * other)
 
 
-width = 1080
-height = 720
+width = 1080.
+height = 720.
 padding = {'w': 5, 'h': 5}
 paddleSize = {'w': 20, 'h': 160}
 ballRadius = 20
@@ -52,6 +52,25 @@ async def game_loop():
         last_frame_time = current_time
 
         new_position = ball['position'] + (ball['velocity'] * delta_time)
+
+        if new_position.x > width or new_position.x < 0:
+            # todo: end game round
+            new_position = Vec2d(width / 2, height / 2)
+            ball['velocity'] = Vec2d(0, 0)
+
+
+        # todo: send event to play sound
+        if new_position.x > ball_paddle_max_x and new_position.x < width and \
+                new_position.y > paddles[1]['y'] - ballRadius and \
+                new_position.y < paddles[1]['y'] + paddleSize['h'] + ballRadius:
+            new_position.x = ball_paddle_max_x
+            ball['velocity'].x = -ball['velocity'].x
+        elif new_position.x < ball_paddle_min_x and new_position.x > 0 and \
+                new_position.y > paddles[0]['y'] - ballRadius and \
+                new_position.y < paddles[0]['y'] + paddleSize['h'] + ballRadius:
+            new_position.x = ball_paddle_min_x
+            ball['velocity'].x = -ball['velocity'].x
+
         # todo: send event to play sound
         if new_position.y < ball_min_y:
             # todo: make this more precise.
@@ -61,13 +80,7 @@ async def game_loop():
             # todo: make this more precise.
             new_position.y = ball_max_y
             ball['velocity'].y = -ball['velocity'].y
-        # todo: check if paddle is there or not
-        if new_position.x > ball_paddle_max_x:
-            new_position.x = ball_paddle_max_x
-            ball['velocity'].x = -ball['velocity'].x
-        elif new_position.x < ball_paddle_min_x:
-            new_position.x = ball_paddle_min_x
-            ball['velocity'].x = -ball['velocity'].x
+
         ball['position'] = new_position
 
         sleep_time = 1. / FPS - (current_time - last_frame_time)
@@ -101,7 +114,9 @@ async def consumer(websocket, message):
     if msg_obj['type'] == 'move':
         player = 0
         move_paddle(player, msg_obj['direction'])
+        move_paddle(1, msg_obj['direction'])
         await websocket.send(paddle_event(player))
+        await websocket.send(paddle_event(1))
 
 
 async def consumer_handler(websocket, path):
