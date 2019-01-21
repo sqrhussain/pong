@@ -43,6 +43,7 @@ ball_paddle_max_x = width - paddleSize['w'] - padding['w'] - ballRadius
 paddle_min_y = 0
 paddle_max_y = height - paddleSize['h']
 FPS = 30
+players_ws = []
 
 
 async def game_loop():
@@ -112,20 +113,18 @@ def move_paddle(player, direction):
         paddles[player]['y'] = new_y
 
 
-async def consumer(websocket, message):
+async def consumer(websocket, message, player):
     msg_obj = json.loads(message)
     if msg_obj['type'] == 'move':
-        player = 0
         move_paddle(player, msg_obj['direction'])
-        move_paddle(1, msg_obj['direction'])
-        await websocket.send(paddle_event(player))
-        await websocket.send(paddle_event(1))
+        await asyncio.wait([ws.send(paddle_event(0)) for ws in players_ws])
+        await asyncio.wait([ws.send(paddle_event(1)) for ws in players_ws])
 
 
-async def consumer_handler(websocket, path):
+async def consumer_handler(websocket, path, player):
     while True:
         message = await websocket.recv()
-        await consumer(websocket, message)
+        await consumer(websocket, message, player)
 
 
 async def producer_handler(websocket, path):
@@ -136,16 +135,23 @@ async def producer_handler(websocket, path):
 
 # todo: on first connect send paddle positions
 async def handler(websocket, path):
-    consumer_task = asyncio.ensure_future(
-        consumer_handler(websocket, path))
-    producer_task = asyncio.ensure_future(
-        producer_handler(websocket, path))
-    done, pending = await asyncio.wait(
-        [consumer_task, producer_task],
-        return_when=asyncio.FIRST_COMPLETED,
-    )
-    for task in pending:
-        task.cancel()
+    players_ws.append(websocket)
+    print('connect {}'.format(len(players_ws)))
+
+    try:
+        consumer_task = asyncio.ensure_future(
+            consumer_handler(websocket, path, len(players_ws) - 1))
+        producer_task = asyncio.ensure_future(
+            producer_handler(websocket, path))
+        done, pending = await asyncio.wait(
+            [consumer_task, producer_task],
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+        for task in pending:
+            task.cancel()
+    finally:
+        print('unregister')
+        players_ws.remove(websocket)
 
 
 if __name__ == "__main__":
