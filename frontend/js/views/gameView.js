@@ -80,7 +80,6 @@ GameView.prototype.drawPaddle = function(position) {
 };
 
 GameView.prototype.drawScore = function(){
-  // TODO plot score on canvas. Change canvas size and boundaries before.
   // may also have two other divs in which we plot scores
   //score 1
   this.canvas.textAlign = "end";
