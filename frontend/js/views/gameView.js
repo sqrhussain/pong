@@ -1,11 +1,11 @@
 function GameView(model) {
 
-  this.size = {w:300,h:150};
-  this.padding = {w:5, h:5};
+  this.size = {w: 1080,h: 720};
+  this.padding = {w: 5, h: 5};
 
 
-  this.paddleSize = {w:10,h:40};
-  this.ballRadius = 5;
+  this.paddleSize = {w: 20,h: 160};
+  this.ballRadius = 20;
 
 
   this.model = model;
@@ -19,11 +19,22 @@ function GameView(model) {
                   y:75/*dummy val*/}
                 ];
   this.ballPosition = {x: 200, y: 60};
+  this.ballPositionServer = {x: 200, y: 60};
+  this.ballVelocityServer = {x: 5, y: 10};
   this.score = [0,0];
 
   this.canvas = document.getElementById('game-canvas').getContext('2d');
+  document.getElementById('game-canvas')
+      .setAttribute('width', this.size.w);
+  document.getElementById('game-canvas')
+      .setAttribute('height', this.size.h);
 
 
+  this.fps = 15;
+  this.now;
+  this.then = Date.now();
+  this.interval = 1000 / this.fps;
+  this.delta;
   var self = this;
   requestAnimationFrame(function () {
     self.gameLoop();
@@ -37,7 +48,9 @@ GameView.prototype.cleanCanvas = function() {
 };
 
 
-GameView.prototype.updateBallPosition = function(position) {
+GameView.prototype.updateBallPosition = function(position, velocity) {
+  this.ballPositionServer = position;
+  this.ballVelocityServer = velocity;
   this.ballPosition = position;
 };
 
@@ -80,8 +93,12 @@ GameView.prototype.onHit = function(hitObject){
    ballHitPaddle();
 };
 
+GameView.prototype.update = function(delta) {
+  this.ballPosition.x = this.ballPositionServer.x + (this.ballVelocityServer.x * delta / 1000);
+  this.ballPosition.y = this.ballPositionServer.y + (this.ballVelocityServer.y * delta / 1000);
+};
 
-GameView.prototype.draw = function() {
+GameView.prototype.draw = function(delta) {
   this.cleanCanvas();
   this.drawBall(this.ballPosition);
   this.drawPaddle(this.paddle[0]);
@@ -90,12 +107,19 @@ GameView.prototype.draw = function() {
 };
 
 GameView.prototype.gameLoop = function() {
-  this.draw();
-
   var self = this;
   requestAnimationFrame(function () {
     self.gameLoop();
   });
+
+  this.now = Date.now();
+  this.delta = this.now - this.then;
+
+  if (this.delta > this.interval) {
+    this.then = this.now - (this.delta % this.interval);
+    this.update(this.delta);
+    this.draw(this.delta);
+  }
 };
 
 GameView.prototype.ballHitWall = function() {
