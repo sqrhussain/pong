@@ -2,12 +2,12 @@ import asyncio
 import websockets
 import json
 import time
+import numpy as np
 
 # see: https://websockets.readthedocs.io/en/stable/index.html
 # https://7webpages.com/blog/writing-online-multiplayer-game-with-python-asyncio-getting-asynchronous/
 
 
-# todo: move to module
 class Vec2d:
     def __init__(self, x=0., y=0.):
         self.x = float(x)
@@ -45,51 +45,88 @@ paddle_max_y = height - paddleSize['h']
 FPS = 30
 
 
+
+
+score = [0,0];
+
+
+def init_round():
+	global ball
+	sign = 1 - 2 * np.random.randint(2);
+	vx = np.random.rand()*0.5 + 0.5;
+	vy = np.sqrt(1-vx**2);
+	ball = {
+	    'position': Vec2d(width/2, height/2),
+	    'velocity': Vec2d(sign * vx, vy-0.5).__mul__(400)
+	}
+	print('init: {}'.format(ball['position'].x))
+def init_game():
+    global score
+    global paddles
+    score = [0,0];
+    paddles = [
+        {'y': 1},
+        {'y': 1}
+    ]
+
 async def game_loop():
-    last_frame_time = time.time()
+    init_game()
+    rnd = 1;
     while True:
-        current_time = time.time()
-        delta_time = current_time - last_frame_time
-        last_frame_time = current_time
+        rnd = rnd +1;
+        init_round()
+        last_frame_time = time.time()
+        while True:
+            current_time = time.time()
+            delta_time = current_time - last_frame_time
+            last_frame_time = current_time
 
-        new_position = ball['position'] + (ball['velocity'] * delta_time)
+            new_position = ball['position'] + (ball['velocity'] * delta_time)
 
-        if new_position.x > width or new_position.x < 0:
-            # todo: end game round
-            new_position = Vec2d(width / 2, height / 2)
-            ball['velocity'] = Vec2d(0, 0)
+            if new_position.x > width or new_position.x < 0:
+                add_score(int(new_position.x < 0)) # player 0 or player 1
+                sleep_time = 1. / FPS - (current_time - last_frame_time)
+                if sleep_time > 0:
+                    await asyncio.sleep(sleep_time)
+                break;
 
 
-        # todo: send event to play sound
-        if new_position.x > ball_paddle_max_x and new_position.x < width and \
-                new_position.y > paddles[1]['y'] - ballRadius and \
-                new_position.y < paddles[1]['y'] + paddleSize['h'] + ballRadius:
-            new_position.x = ball_paddle_max_x
-            ball['velocity'].x = -ball['velocity'].x
-            ball['velocity'] += ball['velocity'] * velocity_increase
-        elif new_position.x < ball_paddle_min_x and new_position.x > 0 and \
-                new_position.y > paddles[0]['y'] - ballRadius and \
-                new_position.y < paddles[0]['y'] + paddleSize['h'] + ballRadius:
-            new_position.x = ball_paddle_min_x
-            ball['velocity'].x = -ball['velocity'].x
-            ball['velocity'] += ball['velocity'] * velocity_increase
+            # todo: send event to play sound
+            if new_position.x > ball_paddle_max_x and new_position.x < width and \
+                    new_position.y > paddles[1]['y'] - ballRadius and \
+                    new_position.y < paddles[1]['y'] + paddleSize['h'] + ballRadius:
+                new_position.x = ball_paddle_max_x
+                ball['velocity'].x = -ball['velocity'].x
+                ball['velocity'].x = ball['velocity'].x + (np.random.rand() - 0.5) * 20
+                ball['velocity'].y = ball['velocity'].y + (np.random.rand() - 0.5) * 20
+                ball['velocity'] += ball['velocity'] * velocity_increase
+            elif new_position.x < ball_paddle_min_x and new_position.x > 0 and \
+                    new_position.y > paddles[0]['y'] - ballRadius and \
+                    new_position.y < paddles[0]['y'] + paddleSize['h'] + ballRadius:
+                new_position.x = ball_paddle_min_x
+                ball['velocity'].x = -ball['velocity'].x
+                ball['velocity'].x = ball['velocity'].x + (np.random.rand() - 0.5) * 20
+                ball['velocity'].y = ball['velocity'].y + (np.random.rand() - 0.5) * 20
+                ball['velocity'] += ball['velocity'] * velocity_increase
 
-        # todo: send event to play sound
-        if new_position.y < ball_min_y:
-            # todo: make this more precise.
-            new_position.y = ball_min_y
-            ball['velocity'].y = -ball['velocity'].y
-        elif new_position.y > ball_max_y:
-            # todo: make this more precise.
-            new_position.y = ball_max_y
-            ball['velocity'].y = -ball['velocity'].y
+            # todo: send event to play sound
+            if new_position.y < ball_min_y:
+                # todo: make this more precise.
+                new_position.y = ball_min_y
+                ball['velocity'].y = -ball['velocity'].y
+            elif new_position.y > ball_max_y:
+                # todo: make this more precise.
+                new_position.y = ball_max_y
+                ball['velocity'].y = -ball['velocity'].y
 
-        ball['position'] = new_position
+            ball['position'] = new_position
 
-        sleep_time = 1. / FPS - (current_time - last_frame_time)
-        if sleep_time > 0:
-            await asyncio.sleep(sleep_time)
+            sleep_time = 1. / FPS - (current_time - last_frame_time)
+            if sleep_time > 0:
+                await asyncio.sleep(sleep_time)
 
+def score_event():
+    return json.dumps({'type': 'score', 'score': score})
 
 def ball_event():
     return json.dumps({'type': 'ball', 'position': ball['position'].__dict__, 'velocity': ball['velocity'].__dict__})
@@ -98,6 +135,10 @@ def ball_event():
 def paddle_event(player):
     return json.dumps({'type': 'paddle', 'player': player, **paddles[player]})
 
+def add_score(player):
+    score[player] = score[player] + 1;
+    print(score)
+    # await websocket.send(score_event())
 
 def move_paddle(player, direction):
     if direction == 'up':
