@@ -160,9 +160,4 @@ GameView.prototype.ballHitPaddle = function() {
 
 };
 
-GameView.prototype.ballHitPaddle = function() {
 
-  var vid = document.getElementById("VictorySound");
-  vid.play();
-
-};
