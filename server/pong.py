@@ -171,6 +171,7 @@ async def consumer_handler(websocket, path, player):
 async def producer_handler(websocket, path):
     while True:
         await websocket.send(ball_event())
+        await websocket.send(score_event())
         await asyncio.sleep(0.1)
 
 
