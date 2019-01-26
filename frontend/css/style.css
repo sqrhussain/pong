@@ -40,6 +40,10 @@ p    {color: red;
         line-height: 200px;
  }
 
+p.documentation{
+       animation : none;
+       font-size: 30px;
+}
 form    {color: red;
         font-family: Arcade Classic;
         margin: auto;

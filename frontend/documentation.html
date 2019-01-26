@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <link rel="stylesheet" href="css/docstyle.css" />
+    <title>Documentation</title>
+  </head>
+  <body>
+  <h1>WT - Project Report: Team Pong/Group 4</h1>
+<p>
+
+Irina Kremers
+1030087
+Irina.kremers@student.tugraz.at <br>
+Hussain Hussain
+11706436
+hussain@student.tugraz.at<br>
+Katharina Greimel
+00730158
+katharina.greimel@student.tugraz.at<br>
+Peter Grassberger
+01260680
+p.grassberger@student.tugraz.at<br>
+</p>
+<h2>Topic</h2>
+  <p class="documentation">
+Multiplayer Pong Game
+  </p>
+  <h2>Description</h2>
+    <p class="documentation">
+        We implemented the early arcade game “pong” with web technologies, to play in the browser. Instead of local
+        multiplayer like the original game, we are to be capable of online multiplayer from one web browser versus
+        another web browser, connected via a server. It is also possible to look up your current highscore after
+        playing the game, connected with your username.
+    </p>
+  <h3>Application Technologies</h3>
+      <p class="documentation">
+          The main technology in use will be HTML5 with javascript on the client side, following the MVC pattern.
+
+ In order to serve this frontend code we need a very basic web server. To display our game graphics we used canvas.
+          As for the storage technology we used Web Storage to save the username.
+Multiplayer communication will be done over WebSockets, for this we implemented a server that takes care of relaying
+          information between browsers, probably in python 3.
+We used two two HTML5 features on our website: Audio(several times over the website) and Web forms with placeholder
+          (on the start page for the playername)
+
+      </p>
+    </body>
+</html>
