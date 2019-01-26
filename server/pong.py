@@ -218,7 +218,7 @@ async def handler(websocket, path):
         producer_task1 = asyncio.ensure_future(
             producer_handler(websocket, path))
         producer_task2 = asyncio.ensure_future(
-        	game_state_producer(websocket,path))
+            game_state_producer(websocket,path))
         done, pending = await asyncio.wait(
             [consumer_task, producer_task1, producer_task2],
             return_when=asyncio.FIRST_COMPLETED,

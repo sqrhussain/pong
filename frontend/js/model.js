@@ -5,6 +5,7 @@ function Model() {
   this.view = null;
   this.own = 0; // just fix that the player is always #0 on their own device (the paddle to the left)
   this.opp = 1;
+  this.playerMessage = {type:"playername", name: "???"};
 
   this.initWebsocket();
 }
@@ -14,10 +15,14 @@ Model.prototype.initWebsocket = function() {
 
   var self = this;
   this.gameServer.onmessage = function(event) {
+
     //console.log("model recv: " + event.data);
     msg = JSON.parse(event.data);
     // processor
     switch(msg.type){
+    case "handshake":
+        this.send(this.playerMessage);
+        break;
     case "ball":
     	self.view.updateBallPosition(msg.position, msg.velocity);
     	break;
@@ -58,5 +63,5 @@ Model.prototype.up = function() {
 }
 
 Model.prototype.playername = function(name) {
-	this.send({type:"playername", name: name});
+    this.playerMessage = {type:"playername", name: name};
 }
