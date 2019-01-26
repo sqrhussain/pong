@@ -55,7 +55,7 @@ Model.prototype.onGameStateChanged = function(game_state){
   switch(game_state){
   case "gameEnd":
     this.send({type:"bye"})
-    gameServer.close();
+    this.gameServer.close();
     this.controller.onGameEnd();
     break;
   case "waitingForPlayers":
