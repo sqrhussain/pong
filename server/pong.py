@@ -99,6 +99,7 @@ async def game_loop():
             if new_position.x > width or new_position.x < 0:
                 add_score(int(new_position.x < 0)) # player 0 or player 1
                 await queue.put(hit_event("goal"))
+                await queue.put(score_event())
                 if score[0] >= gameEndAt or score[1] >= gameEndAt:
                     print('end!')
                     game_state = 'gameEnd'
@@ -207,7 +208,6 @@ async def consumer_handler(websocket, path, player):
 async def producer_handler(websocket, path):
     while True:
         await websocket.send(ball_event())
-        await websocket.send(score_event())
         await asyncio.sleep(0.1)
 
 
@@ -215,6 +215,7 @@ async def game_state_producer(websocket, path):
     while True:
         event = await queue.get()
         await asyncio.wait([ws.send(event) for ws in players_ws])
+        print(event)
 
 
 
