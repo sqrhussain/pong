@@ -147,14 +147,12 @@ GameView.prototype.gameLoop = function() {
 };
 
 GameView.prototype.ballHitWall = function() {
-  console.log('wall')
   var vid = document.getElementById("WallSound");
   vid.play();
 
 };
 
 GameView.prototype.ballHitPaddle = function() {
-  console.log('paddle')
   var vid = document.getElementById("PaddleSound");
   vid.play();
 

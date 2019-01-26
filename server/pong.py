@@ -74,7 +74,7 @@ queue = asyncio.Queue(10)
 async def game_loop():
     # waitingForPlayers, playing or gameEnd
     game_state = 'waitingForPlayers'
-    gameEndAt = 10
+    gameEndAt = 3
 
     init_game()
     rnd = 1;
@@ -215,7 +215,6 @@ async def game_state_producer(websocket, path):
     while True:
         event = await queue.get()
         await asyncio.wait([ws.send(event) for ws in players_ws])
-        #await websocket.send(event)
 
 
 
