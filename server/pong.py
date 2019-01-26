@@ -68,6 +68,8 @@ def init_game():
         {'y': height / 2. - paddleSize['h'] / 2.}
     ]
 
+def onGameEnd():
+	init_game();
 
 queue = asyncio.Queue(10)
 
@@ -79,8 +81,10 @@ async def game_loop():
     init_game()
     rnd = 1;
     while True:
-        print('game_state {}'.format(game_state))
-        if len(players_ws) > 1 and game_state == 'waitingForPlayers':
+        print('game_state {}, ws set = {}'.format(game_state,len(players_ws)))
+        if len(players_ws) < 2 and game_state == 'gameEnd':
+        	game_state = 'waitingForPlayers'
+        if len(players_ws) > 1 and game_state != 'playing':
             game_state = 'playing'
         if game_state == 'waitingForPlayers' or game_state == 'gameEnd':
             await asyncio.sleep(1)
@@ -101,7 +105,7 @@ async def game_loop():
                 await queue.put(hit_event("goal"))
                 await queue.put(score_event())
                 if score[0] >= gameEndAt or score[1] >= gameEndAt:
-                    print('end!')
+                    onGameEnd()
                     game_state = 'gameEnd'
                     await queue.put(game_state_event(game_state))
                 sleep_time = 1. / FPS - (current_time - last_frame_time)
