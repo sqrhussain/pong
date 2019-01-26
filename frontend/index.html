@@ -16,16 +16,19 @@
 
       <form>
        Playername:<br>
-       <input type="text" name="username" placeholder="Player X"><br>
+       <input type="text" id="username" name="username" placeholder="Player X"><br>
       </form>
       <br>
       <button id="StartButton" class="float-left submit-button" >Start Game!</button>
 
-      <script type="text/javascript">
-       document.getElementById("StartButton").onclick = function () {
-       location.href = "#play";
-        };
-      </script>
+ <div id="result"></div>
+<!-- Local Storage Try
+      <div id="store"></div>
+      <script>
+          document.getElementById("store").innerHTML = localStorage.getItem("username", input.value);
+      </script>-->
+
+
     </div>
     <div id="game-route" class="route">
       <canvas id="game-canvas"></canvas>
