@@ -2,8 +2,9 @@
 function GameController(){
 
 var name = localStorage.getItem("storage");
-model.playername(name);
+
   var model = new Model();
+  model.playername(name);
   var gameView = new GameView(model);
   model.setView(gameView);
 
