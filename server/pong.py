@@ -68,20 +68,27 @@ def init_game():
         {'y': height / 2. - paddleSize['h'] / 2.}
     ]
 
-def onGameEnd():
-	init_game();
+async def onGameEnd(winner):
+    print(winner)
+    print(game_state_event('gameEnd',win=1))
+    await (qs[winner]).put(game_state_event('gameEnd',win=1))
+    await (qs[1-winner]).put(game_state_event('gameEnd',win=0))
+    init_game();
 
 queue = asyncio.Queue(10)
+qs = [asyncio.Queue(10),asyncio.Queue(10)]
 
 async def game_loop():
     # waitingForPlayers, playing or gameEnd
     game_state = 'waitingForPlayers'
-    gameEndAt = 3
+    await queue.put(game_state_event(game_state))
+    gameEndAt = 10
 
     init_game()
     rnd = 1;
     while True:
         print('game_state {}, ws set = {}'.format(game_state,len(players_ws)))
+        await queue.put(game_state_event(game_state))
         if len(players_ws) < 2 and game_state == 'gameEnd':
         	game_state = 'waitingForPlayers'
         if len(players_ws) > 1 and game_state != 'playing':
@@ -89,7 +96,7 @@ async def game_loop():
         if game_state == 'waitingForPlayers' or game_state == 'gameEnd':
             await asyncio.sleep(1)
             continue
-
+        await queue.put(game_state_event(game_state))
         rnd = rnd +1;
         init_round()
         last_frame_time = time.time()
@@ -105,9 +112,8 @@ async def game_loop():
                 await queue.put(hit_event("goal"))
                 await queue.put(score_event())
                 if score[0] >= gameEndAt or score[1] >= gameEndAt:
-                    onGameEnd()
+                    await onGameEnd(score[1] > score[0])
                     game_state = 'gameEnd'
-                    await queue.put(game_state_event(game_state))
                 sleep_time = 1. / FPS - (current_time - last_frame_time)
                 if sleep_time > 0:
                     await asyncio.sleep(sleep_time)
@@ -161,8 +167,8 @@ def ball_event():
 def paddle_event(player):
     return json.dumps({'type': 'paddle', 'player': player, **paddles[player]})
 
-def game_state_event(state):
-	return json.dumps({'type': 'game_state', 'state': state})
+def game_state_event(state,win = -1):
+	return json.dumps({'type': 'game_state', 'state': state, 'win' : win})
 
 def hit_event(hitObject):
 	return json.dumps({'type': 'hit', 'hitObject': hitObject})
@@ -221,6 +227,12 @@ async def game_state_producer(websocket, path):
         await asyncio.wait([ws.send(event) for ws in players_ws])
         print(event)
 
+async def game_win_producer(websocket, path):
+    while True:
+        event = await (qs[0]).get()
+        await players_ws[0].send(event)
+        event = await (qs[1]).get()
+        await players_ws[1].send(event)
 
 
 # todo: on first connect send paddle positions
@@ -237,8 +249,10 @@ async def handler(websocket, path):
             producer_handler(websocket, path))
         producer_task2 = asyncio.ensure_future(
             game_state_producer(websocket,path))
+        producer_task3 = asyncio.ensure_future(
+            game_win_producer(websocket,path))
         done, pending = await asyncio.wait(
-            [consumer_task, producer_task1, producer_task2],
+            [consumer_task, producer_task1, producer_task2,producer_task3],
             return_when=asyncio.FIRST_COMPLETED,
         )
         for task in pending:

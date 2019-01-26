@@ -36,6 +36,9 @@ function GameView(model) {
   this.then = Date.now();
   this.interval = 1000 / this.fps;
   this.delta;
+
+  this.messageText = "";
+
   var self = this;
   requestAnimationFrame(function () {
     self.gameLoop();
@@ -105,6 +108,13 @@ GameView.prototype.drawLine = function(){
   this.canvas.lineTo(540, 720);
   this.canvas.stroke();
 };
+
+GameView.prototype.drawMessageText = function(){
+  this.canvas.font = "60px Arcade Classic";
+  this.canvas.textAlign = "center";
+  this.canvas.fillText(this.messageText, this.size.w/2, this.size.h/2 + 100);
+};
+
 GameView.prototype.onHit = function(hitObject){
   // TODO make noise according to the hit object ("wall"/"paddle"/"out");
   if(hitObject == "wall")
@@ -128,6 +138,7 @@ GameView.prototype.draw = function(delta) {
   this.drawScore();
   this.drawPlayer();
   this.drawLine();
+  this.drawMessageText();
 };
 
 GameView.prototype.gameLoop = function() {
@@ -160,8 +171,17 @@ GameView.prototype.ballHitPaddle = function() {
 
 GameView.prototype.ballHitGoal = function(){
   // todo ... could play a sound!
-}
+};
 
 GameView.prototype.onGameEnd = function(){
   // currently nothing to do here
-}
+};
+
+GameView.prototype.onWaiting = function(){
+  this.messageText = "Waiting for the other player"
+};
+
+GameView.prototype.onPlaying = function(){
+  this.messageText = ""
+};
+

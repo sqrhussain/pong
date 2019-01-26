@@ -21,7 +21,6 @@ Model.prototype.initWebsocket = function() {
 
   this.gameServer.onmessage = function(event) {
 
-    console.log("model recv: " + event.data);
     msg = JSON.parse(event.data);
     // processor
     switch(msg.type){
@@ -35,7 +34,8 @@ Model.prototype.initWebsocket = function() {
       self.view.updateScore(msg.score);
       break;
     case "game_state":
-      self.onGameStateChanged(msg.state);
+      console.log("model recv: " + event.data);
+      self.onGameStateChanged(msg.state,msg.win);
       break;
     case "hit":
       self.view.onHit(msg.hitObject)
@@ -52,17 +52,25 @@ Model.prototype.initWebsocket = function() {
   }
 };
 
-Model.prototype.onGameStateChanged = function(game_state){
+Model.prototype.onGameStateChanged = function(game_state,win){
   console.log('game_state')
   switch(game_state){
   case "gameEnd":
+    if(win){
+      location.href = '#win';
+    } else {
+      location.href = '#lose';
+    }
     this.send({type:"bye"})
     this.gameServer.close();
+    this.view.onGameEnd();
     this.controller.onGameEnd();
     break;
   case "waitingForPlayers":
+    this.view.onWaiting();
     break;
   case "playing":
+    this.view.onPlaying();
     break;
   default:
     console.warn("WARNING: game_state not supported")
