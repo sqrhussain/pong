@@ -1,0 +1,25 @@
+h1   {color: black;
+        font-size: 80px;
+        text-align: center;
+}
+h2 {
+text-align: center;
+}
+h3{
+text-align : center;
+}
+
+p{
+text-align: center;
+font-size : 20px;
+}
+
+p.documentation{
+text-align: center;
+}
+
+button{
+        margin: auto;
+        display: block;
+        font-size: 22px;
+}

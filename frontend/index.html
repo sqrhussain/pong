@@ -22,12 +22,6 @@
       <button id="StartButton" class="float-left submit-button" >Start Game!</button>
 
  <div id="result"></div>
-<!-- Local Storage Try
-      <div id="store"></div>
-      <script>
-          document.getElementById("store").innerHTML = localStorage.getItem("username", input.value);
-      </script>-->
-
 
     </div>
     <div id="game-route" class="route">
@@ -35,11 +29,6 @@
 
       <button id="EndButton" class="float-left submit-button" >End Game!</button>
 
-      <script type="text/javascript">
-       document.getElementById("EndButton").onclick = function () {
-       location.href = "#end";
-        };
-      </script>
 
     </div>
     <div id="game-end-route" class="route">
@@ -52,29 +41,22 @@
 
       <button id="HighScoreButton" class="float-left submit-button">Go to highscore!</button>
 
-      <script type="text/javascript">
-       document.getElementById("HighScoreButton").onclick = function () {
-       location.href = "#highscore";
-        };
-      </script>
-            <button id="StartEndButton" class="float-left submit-button" >Go to Start Page!</button>
 
-      <script type="text/javascript">
-       document.getElementById("StartEndButton").onclick = function () {
-       location.href = "#";
-        };
-      </script>
+      <button id="StartEndButton" class="float-left submit-button" >Go to Start Page!</button>
+      <button id="DocumentButton" class="float-left submit-button" >Go to Documentation!</button>
     </div>
     <div id="highscore-route" class="route">
       <h1>Highscore</h1>
       <p>highscore-route</p>
             <button id="StartEndHighscoreButton" class="float-left submit-button" >Go to Start Page!</button>
 
-      <script type="text/javascript">
-       document.getElementById("StartEndHighscoreButton").onclick = function () {
-       location.href = "#";
-        };
-      </script>
+    </div>
+
+    <div id="documentation-route" class="route">
+      <h1>Documentation</h1>
+      <p class="documentation">Link:</p>
+            <button id="StartEndDocumentationButton" class="float-left submit-button" >Go to Start Page!</button>
+
     </div>
     <audio id="WallSound">
       <source src="audio/WallSound.wav" type="audio/mp3">

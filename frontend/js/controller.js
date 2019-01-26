@@ -1,9 +1,10 @@
 // listen for inputs from view and send to model
 function GameController(){
 
-
+var name = localStorage.getItem("storage");
 
   var model = new Model();
+  model.playername(name);
   var gameView = new GameView(model);
   model.setView(gameView);
 

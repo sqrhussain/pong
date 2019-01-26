@@ -56,3 +56,7 @@ Model.prototype.down = function() {
 Model.prototype.up = function() {
 	this.send({type:"move",direction:"up"});
 }
+
+Model.prototype.playername = function(name) {
+	this.send({type:"playername", name: name});
+}
