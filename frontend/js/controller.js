@@ -5,6 +5,7 @@ function GameController(){
   var model = new Model();
   var gameView = new GameView(model);
   model.setView(gameView);
+  model.setController(this);
 
   var name = localStorage.getItem("storage");
   model.playername(name);
@@ -25,6 +26,6 @@ function GameController(){
 
 }
 
-GameController.prototype.destroy = function(){
+GameController.prototype.onGameEnd = function(){
 	document.removeEventListener("keydown",this.onKeydown);
 }

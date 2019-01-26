@@ -106,7 +106,7 @@ GameView.prototype.drawLine = function(){
   this.canvas.stroke();
 };
 GameView.prototype.onHit = function(hitObject){
-  // TODO make noise according to the hit object ("wall"/"paddle");
+  // TODO make noise according to the hit object ("wall"/"paddle"/"out");
   if(hitObject == "wall")
     this.ballHitWall();
   else if(hitObject == "paddle")
@@ -161,9 +161,9 @@ GameView.prototype.ballHitPaddle = function() {
 };
 
 GameView.prototype.ballHitGoal = function(){
-  // todo ...
+  // todo ... could play a sound!
 }
 
 GameView.prototype.onGameEnd = function(){
-  // todo ....
+  // currently nothing to do here
 }

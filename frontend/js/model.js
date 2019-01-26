@@ -3,6 +3,7 @@ function Model() {
   this.username = '';
   this.gameServer = null;
   this.view = null;
+  this.controller = null;
   this.own = 0; // just fix that the player is always #0 on their own device (the paddle to the left)
   this.opp = 1;
 
@@ -28,20 +29,42 @@ Model.prototype.initWebsocket = function() {
       self.view.updateScore(msg.score);
       break;
     case "game_state":
-      self.view.onGameEnd();
+      this.onGameStateChanged(msg.game_state);
       break;
     case "hit":
       self.view.onHit(msg.hitObject)
       break;
     // TODO process rest of the messages...
     default:
+      console.warn("WARNING: message type not supported")
     	break;
     }
   }
 };
 
+Model.prototype.onGameStateChanged = function(game_state){
+  switch(game_state){
+  case "gameEnd":
+    this.send({type:"bye"})
+    gameServer.close();
+    this.controller.onGameEnd();
+    break;
+  case "waitingForPlayers":
+    break;
+  case "playing":
+    break;
+  default:
+    console.warn("WARNING: game_state not supported")
+    break;
+  }
+}
+
 Model.prototype.setView = function(view) {
 	this.view = view;
+}
+ 
+Model.prototype.setController = function(controller) {
+  this.controller = controller;
 }
 
 Model.prototype.send = function(message) {
