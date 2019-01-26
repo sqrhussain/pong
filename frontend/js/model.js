@@ -14,6 +14,10 @@ Model.prototype.initWebsocket = function() {
   this.gameServer = new WebSocket(config.gameServerUrl);
 
   var self = this;
+  this.gameServer.onopen = function(event) {
+    self.send(self.playerMessage);
+  };
+
   this.gameServer.onmessage = function(event) {
 
     //console.log("model recv: " + event.data);
@@ -21,7 +25,6 @@ Model.prototype.initWebsocket = function() {
     // processor
     switch(msg.type){
     case "handshake":
-        this.send(this.playerMessage);
         break;
     case "ball":
     	self.view.updateBallPosition(msg.position, msg.velocity);
