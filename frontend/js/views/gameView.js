@@ -14,9 +14,9 @@ function GameView(model) {
 
   // to be controlled by model
   this.paddle = [{x:this.paddleX[0],
-                  y:25/*dummy val*/},
+                  y: this.size['h'] / 2 - this.paddleSize['h'] / 2},
                  {x:this.paddleX[1],
-                  y:75/*dummy val*/}
+                  y: this.size['h'] / 2 - this.paddleSize['h'] / 2}
                 ];
   this.ballPosition = {x: this.size.w / 2, y: this.size.h / 2};
   this.ballPositionServer = {x: this.size.w / 2, y: this.size.h / 2};
