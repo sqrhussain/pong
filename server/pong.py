@@ -67,10 +67,13 @@ def init_game():
         {'y': 1}
     ]
 
+
+queue = asyncio.Queue(10)
+
 async def game_loop():
     # waitingForPlayers, playing or gameEnd
     game_state = 'waitingForPlayers'
-    gameEndAt = 3
+    gameEndAt = 10
 
     init_game()
     rnd = 1;
@@ -94,9 +97,11 @@ async def game_loop():
 
             if new_position.x > width or new_position.x < 0:
                 add_score(int(new_position.x < 0)) # player 0 or player 1
+                await queue.put(hit_event("goal"))
                 if score[0] >= gameEndAt or score[1] >= gameEndAt:
                     print('end!')
                     game_state = 'gameEnd'
+                    await queue.put(game_state_event(game_state))
                 sleep_time = 1. / FPS - (current_time - last_frame_time)
                 if sleep_time > 0:
                     await asyncio.sleep(sleep_time)
@@ -107,6 +112,7 @@ async def game_loop():
             if new_position.x > ball_paddle_max_x and new_position.x < width and \
                     new_position.y > paddles[1]['y'] - ballRadius and \
                     new_position.y < paddles[1]['y'] + paddleSize['h'] + ballRadius:
+                await queue.put(hit_event("paddle"))
                 new_position.x = ball_paddle_max_x
                 ball['velocity'].x = -ball['velocity'].x
                 ball['velocity'].x = ball['velocity'].x + (np.random.rand() - 0.5) * 20
@@ -115,6 +121,7 @@ async def game_loop():
             elif new_position.x < ball_paddle_min_x and new_position.x > 0 and \
                     new_position.y > paddles[0]['y'] - ballRadius and \
                     new_position.y < paddles[0]['y'] + paddleSize['h'] + ballRadius:
+                await queue.put(hit_event("paddle"))
                 new_position.x = ball_paddle_min_x
                 ball['velocity'].x = -ball['velocity'].x
                 ball['velocity'].x = ball['velocity'].x + (np.random.rand() - 0.5) * 20
@@ -123,10 +130,12 @@ async def game_loop():
 
             # todo: send event to play sound
             if new_position.y < ball_min_y:
+                await queue.put(hit_event("wall"))
                 # todo: make this more precise.
                 new_position.y = ball_min_y
                 ball['velocity'].y = -ball['velocity'].y
             elif new_position.y > ball_max_y:
+                await queue.put(hit_event("wall"))
                 # todo: make this more precise.
                 new_position.y = ball_max_y
                 ball['velocity'].y = -ball['velocity'].y
@@ -143,9 +152,15 @@ def score_event():
 def ball_event():
     return json.dumps({'type': 'ball', 'position': ball['position'].__dict__, 'velocity': ball['velocity'].__dict__})
 
-
 def paddle_event(player):
     return json.dumps({'type': 'paddle', 'player': player, **paddles[player]})
+
+def game_state_event(state):
+	return json.dumps({'type': 'game_state', 'state': state})
+
+def hit_event(hitObject):
+	return json.dumps({'type': 'hit', 'hitObject': hitObject})
+
 
 def add_score(player):
     score[player] = score[player] + 1;
@@ -185,6 +200,12 @@ async def producer_handler(websocket, path):
         await websocket.send(score_event())
         await asyncio.sleep(0.1)
 
+async def game_state_producer(websocket, path):
+    while True:
+        event = await queue.get()
+        await websocket.send(event)
+
+
 
 # todo: on first connect send paddle positions
 async def handler(websocket, path):
@@ -194,10 +215,12 @@ async def handler(websocket, path):
     try:
         consumer_task = asyncio.ensure_future(
             consumer_handler(websocket, path, len(players_ws) - 1))
-        producer_task = asyncio.ensure_future(
+        producer_task1 = asyncio.ensure_future(
             producer_handler(websocket, path))
+        producer_task2 = asyncio.ensure_future(
+        	game_state_producer(websocket,path))
         done, pending = await asyncio.wait(
-            [consumer_task, producer_task],
+            [consumer_task, producer_task1, producer_task2],
             return_when=asyncio.FIRST_COMPLETED,
         )
         for task in pending:

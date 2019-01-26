@@ -14,7 +14,7 @@ Model.prototype.initWebsocket = function() {
 
   var self = this;
   this.gameServer.onmessage = function(event) {
-    console.log("model recv: " + event.data);
+    //console.log("model recv: " + event.data);
     msg = JSON.parse(event.data);
     // processor
     switch(msg.type){
@@ -27,8 +27,8 @@ Model.prototype.initWebsocket = function() {
     case "score":
       self.view.updateScore(msg.score);
       break;
-    case "gameStart":
-      // IDK??
+    case "game_state":
+      self.view.onGameEnd();
       break;
     case "hit":
       self.view.onHit(msg.hitObject)

@@ -107,12 +107,12 @@ GameView.prototype.drawLine = function(){
 };
 GameView.prototype.onHit = function(hitObject){
   // TODO make noise according to the hit object ("wall"/"paddle");
-   if(hitObject == "wall")
-   {
-     ballHitWall();
-   }
-   else
-   ballHitPaddle();
+  if(hitObject == "wall")
+    this.ballHitWall();
+  else if(hitObject == "paddle")
+    this.ballHitPaddle();
+  else if(hitObject == "out")
+    this.ballHitGoal();
 };
 
 GameView.prototype.update = function(delta) {
@@ -147,17 +147,23 @@ GameView.prototype.gameLoop = function() {
 };
 
 GameView.prototype.ballHitWall = function() {
-
+  console.log('wall')
   var vid = document.getElementById("WallSound");
   vid.play();
 
 };
 
 GameView.prototype.ballHitPaddle = function() {
-
+  console.log('paddle')
   var vid = document.getElementById("PaddleSound");
   vid.play();
 
 };
 
+GameView.prototype.ballHitGoal = function(){
+  // todo ...
+}
 
+GameView.prototype.onGameEnd = function(){
+  // todo ....
+}
