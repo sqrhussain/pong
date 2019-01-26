@@ -18,9 +18,9 @@ function GameView(model) {
                  {x:this.paddleX[1],
                   y:75/*dummy val*/}
                 ];
-  this.ballPosition = {x: 200, y: 60};
-  this.ballPositionServer = {x: 200, y: 60};
-  this.ballVelocityServer = {x: 5, y: 10};
+  this.ballPosition = {x: this.size.w / 2, y: this.size.h / 2};
+  this.ballPositionServer = {x: this.size.w / 2, y: this.size.h / 2};
+  this.ballVelocityServer = {x: 0, y: 0};
   this.score = [0,0];
   this.player = ["Player 1", "Player 2"];
 

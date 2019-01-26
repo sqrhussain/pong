@@ -28,8 +28,8 @@ ballRadius = 20
 
 paddleStep = 20
 ball = {
-    'position': Vec2d(5, 5),
-    'velocity': Vec2d(100, 200)
+    'position': Vec2d(width / 2, height / 2),
+    'velocity': Vec2d(0, 0)
 }
 velocity_increase = 0.05
 paddles = [
@@ -45,10 +45,7 @@ paddle_max_y = height - paddleSize['h']
 FPS = 30
 players_ws = []
 
-
-
-
-score = [0,0];
+score = [0,0]
 
 
 def init_round():
@@ -71,9 +68,20 @@ def init_game():
     ]
 
 async def game_loop():
+    # waitingForPlayers, playing or gameEnd
+    game_state = 'waitingForPlayers'
+    gameEndAt = 3
+
     init_game()
     rnd = 1;
     while True:
+        print('game_state {}'.format(game_state))
+        if len(players_ws) > 1 and game_state == 'waitingForPlayers':
+            game_state = 'playing'
+        if game_state == 'waitingForPlayers' or game_state == 'gameEnd':
+            await asyncio.sleep(1)
+            continue
+
         rnd = rnd +1;
         init_round()
         last_frame_time = time.time()
@@ -86,10 +94,13 @@ async def game_loop():
 
             if new_position.x > width or new_position.x < 0:
                 add_score(int(new_position.x < 0)) # player 0 or player 1
+                if score[0] >= gameEndAt or score[1] >= gameEndAt:
+                    print('end!')
+                    game_state = 'gameEnd'
                 sleep_time = 1. / FPS - (current_time - last_frame_time)
                 if sleep_time > 0:
                     await asyncio.sleep(sleep_time)
-                break;
+                break
 
 
             # todo: send event to play sound
