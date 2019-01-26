@@ -1,71 +1,80 @@
 @font-face {
-  font-family: Arcade Classic;
-  src: url(fonts/ARCADECLASSIC.TTF); format(ttf);
+    font-family: Arcade Classic;
+    src: url(fonts/ARCADECLASSIC.TTF); format(ttf);
 }
 
 
 @keyframes move {
-  from {
-    margin-left: 20%;
-    width: 100%;
-  }
+    from {
+        margin-left: 20%;
+        width: 100%;
+    }
 
-  to {
-    margin-left: 50%;
-    width: 300%;
-  }
+    to {
+        margin-left: 50%;
+        width: 300%;
+    }
 }
 
 body {
-  background-color: black;
-  color: white;
+    background-color: black;
+    color: white;
     overflow: hidden;
 }
-h1   {color: red;
-        font-family: Arcade Classic;
-        font-size: 180px;
-        width: 100%;
-        height: 100px;
-        vertical-align: middle;
-        line-height: 0.75;
-        text-align: center;
+
+h1 {
+    color: red;
+    font-family: Arcade Classic;
+    font-size: 180px;
+    width: 100%;
+    height: 100px;
+    vertical-align: middle;
+    line-height: 0.75;
+    text-align: center;
 }
 
-p    {color: red;
-        animation: move 10s infinite alternate ease-in-out;
-        font-family: Arcade Classic;
-        font-size: 60px;
-        width: 100%;
-        height: 150px;
-        vertical-align: middle;
-        line-height: 2;
- }
-
-p.documentation{
-       animation : none;
-       font-size: 30px;
+p {
+    color: red;
+    animation: move 10s infinite alternate ease-in-out;
+    font-family: Arcade Classic;
+    font-size: 60px;
+    width: 100%;
+    height: 150px;
+    vertical-align: middle;
+    line-height: 2;
 }
-form    {color: red;
-        font-family: Arcade Classic;
-        margin: auto;
-        text-align: center;
-        display: block;
-        font-size: 28px;}
 
-button {color: red;
-        border-radius: 8px;
-        font-family: Arcade Classic;
-        margin: auto;
-        display: block;
-        font-size: 42px;
- }
+p.documentation {
+    animation: none;
+    font-size: 30px;
+}
+
+form {
+    color: red;
+    font-family: Arcade Classic;
+    margin: auto;
+    text-align: center;
+    display: block;
+    font-size: 28px;
+}
+
+button {
+    color: red;
+    border-radius: 8px;
+    font-family: Arcade Classic;
+    margin: auto;
+    display: block;
+    font-size: 42px;
+}
+
 .route {
-  display: none;
+    display: none;
 }
 
 #game-route {
-  display: block;
+    display: block;
 }
+
 canvas {
     background-color: black;
     width: 100%;
