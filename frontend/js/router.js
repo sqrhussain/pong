@@ -2,7 +2,8 @@ function Router() {
   this.routes = {
     '': {'routeId': 'start-route', route: startRoute},
     '#play': {'routeId': 'game-route', route: gameRoute},
-    '#end': {'routeId': 'game-end-route', route: gameEndRoute},
+    '#win': {'routeId': 'game-win-route', route: gameWinRoute},
+    '#lose': {'routeId': 'game-lose-route', route: gameLoseRoute},
     '#highscore': {'routeId': 'highscore-route', route: highscoreRoute}
   };
   this.currentRoute = null;

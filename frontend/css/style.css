@@ -19,6 +19,7 @@
 body {
   background-color: black;
   color: white;
+    overflow: hidden;
 }
 h1   {color: red;
         font-family: Arcade Classic;
@@ -26,7 +27,7 @@ h1   {color: red;
         width: 100%;
         height: 100px;
         vertical-align: middle;
-        line-height: 300px;
+        line-height: 0.75;
         text-align: center;
 }
 
@@ -37,7 +38,7 @@ p    {color: red;
         width: 100%;
         height: 150px;
         vertical-align: middle;
-        line-height: 200px;
+        line-height: 2;
  }
 
 p.documentation{
