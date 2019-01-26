@@ -33,8 +33,8 @@ ball = {
 }
 velocity_increase = 0.05
 paddles = [
-    {'y': 1},
-    {'y': 1}
+    {'y': height / 2. + paddleSize['h'] / 2.},
+    {'y': height / 2. + paddleSize['h'] / 2.}
 ]
 ball_min_y = ballRadius
 ball_max_y = height - ballRadius
@@ -64,8 +64,8 @@ def init_game():
     global paddles
     score = [0,0];
     paddles = [
-        {'y': 1},
-        {'y': 1}
+        {'y': height / 2. - paddleSize['h'] / 2.},
+        {'y': height / 2. - paddleSize['h'] / 2.}
     ]
 
 
@@ -223,6 +223,8 @@ async def game_state_producer(websocket, path):
 async def handler(websocket, path):
     players_ws.append(websocket)
     print('connect {}'.format(len(players_ws)))
+    await queue.put(paddle_event(0))
+    await queue.put(paddle_event(1))
 
     try:
         consumer_task = asyncio.ensure_future(
