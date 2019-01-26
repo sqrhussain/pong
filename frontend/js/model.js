@@ -21,7 +21,7 @@ Model.prototype.initWebsocket = function() {
 
   this.gameServer.onmessage = function(event) {
 
-    //console.log("model recv: " + event.data);
+    console.log("model recv: " + event.data);
     msg = JSON.parse(event.data);
     // processor
     switch(msg.type){
@@ -37,7 +37,7 @@ Model.prototype.initWebsocket = function() {
       self.view.updateScore(msg.score);
       break;
     case "game_state":
-      this.onGameStateChanged(msg.game_state);
+      self.onGameStateChanged(msg.state);
       break;
     case "hit":
       self.view.onHit(msg.hitObject)
@@ -51,6 +51,7 @@ Model.prototype.initWebsocket = function() {
 };
 
 Model.prototype.onGameStateChanged = function(game_state){
+  console.log('game_state')
   switch(game_state){
   case "gameEnd":
     this.send({type:"bye"})
