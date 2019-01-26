@@ -25,8 +25,6 @@ Model.prototype.initWebsocket = function() {
     msg = JSON.parse(event.data);
     // processor
     switch(msg.type){
-    case "handshake":
-        break;
     case "ball":
     	self.view.updateBallPosition(msg.position, msg.velocity);
     	break;
@@ -43,6 +41,10 @@ Model.prototype.initWebsocket = function() {
       self.view.onHit(msg.hitObject)
       break;
     // TODO process rest of the messages...
+    case "names":
+        self.view.player[0] = msg.player1;
+        self.view.player[1] = msg.player2;
+        break;
     default:
       console.warn("WARNING: message type not supported")
     	break;

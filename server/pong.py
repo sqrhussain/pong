@@ -44,6 +44,7 @@ paddle_min_y = 0
 paddle_max_y = height - paddleSize['h']
 FPS = 30
 players_ws = []
+player_names = []
 
 score = [0,0]
 
@@ -162,6 +163,10 @@ def hit_event(hitObject):
 	return json.dumps({'type': 'hit', 'hitObject': hitObject})
 
 
+def names_event():
+	return json.dumps({'type': 'names', 'player1': player_names[0], 'player2': player_names[1]})
+
+
 def add_score(player):
     score[player] = score[player] + 1;
     print(score)
@@ -186,6 +191,11 @@ async def consumer(websocket, message, player):
         move_paddle(player, msg_obj['direction'])
         await asyncio.wait([ws.send(paddle_event(0)) for ws in players_ws])
         await asyncio.wait([ws.send(paddle_event(1)) for ws in players_ws])
+    elif msg_obj['type'] == 'playername':
+        print(msg_obj['name'])
+        player_names.append(msg_obj['name'])
+        if len(player_names) > 1:
+            await queue.put(names_event())
 
 
 async def consumer_handler(websocket, path, player):
@@ -200,10 +210,12 @@ async def producer_handler(websocket, path):
         await websocket.send(score_event())
         await asyncio.sleep(0.1)
 
+
 async def game_state_producer(websocket, path):
     while True:
         event = await queue.get()
-        await websocket.send(event)
+        await asyncio.wait([ws.send(event) for ws in players_ws])
+        #await websocket.send(event)
 
 
 
