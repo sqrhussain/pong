@@ -24,7 +24,7 @@ class Vec2d:
 width = 1080.
 height = 720.
 padding = {'w': 5, 'h': 5}
-paddleSize = {'w': 20, 'h': 160}
+paddleSize = {'w': 30, 'h': 160}
 ballRadius = 20
 
 paddleStep = 20
@@ -43,7 +43,7 @@ ball_paddle_min_x = paddleSize['w'] + padding['w'] + ballRadius
 ball_paddle_max_x = width - paddleSize['w'] - padding['w'] - ballRadius
 paddle_min_y = 0
 paddle_max_y = height - paddleSize['h']
-FPS = 30
+FPS = 60
 players_ws = []
 player_names = []
 
@@ -229,7 +229,7 @@ async def consumer_handler(websocket, path, player):
 async def producer_handler(websocket, path):
     while True:
         await websocket.send(ball_event())
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.05)
 
 
 async def game_state_producer(websocket, path):

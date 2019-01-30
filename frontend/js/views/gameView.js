@@ -4,7 +4,7 @@ function GameView(model) {
   this.padding = {w: 5, h: 5};
 
 
-  this.paddleSize = {w: 20,h: 160};
+  this.paddleSize = {w: 30,h: 160};
   this.ballRadius = 20;
 
 
@@ -31,7 +31,7 @@ function GameView(model) {
       .setAttribute('height', this.size.h);
 
 
-  this.fps = 15;
+  this.fps = 30;
   this.now;
   this.then = Date.now();
   this.interval = 1000 / this.fps;
