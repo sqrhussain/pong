@@ -36,16 +36,31 @@ Multiplayer Pong Game
     </p>
   <h3>Application Technologies</h3>
       <p class="documentation">
-          The main technology in use will be HTML5 with javascript on the client side, following the MVC pattern.
+          The main technology in use is be HTML5 with javascript on the client side, following the MVC pattern.
 
  In order to serve this frontend code we need a very basic web server. To display our game graphics we used canvas.
-          As for the storage technology we used Web Storage to save the username.
-Multiplayer communication will be done over WebSockets, for this we implemented a server that takes care of relaying
-          information between browsers, probably in python 3.
-We used two two HTML5 features on our website: Audio(several times over the website) and Web forms with placeholder
-          (on the start page for the playername)
+          As for the storage technology we used Local Storage to save the username.
+Multiplayer communication is be done over WebSockets, for this we implemented a server in python 3 that takes care of relaying
+          information between browsers.
+We used two HTML5 features on our website: Audio(several times over the website) and Web forms with placeholder
+          (on the start page for the playername).
 
       </p>
+      <h2>How to run the game</h2>
+
+      <p class="documentation">
+          In the frontend folder open the index.html in the browser or use <code>python -m SimpleHTTPServer 8080</code>
+          and open http://localhost:8080 in your browser. In the server folder run
+          <code>pip3 install -r server/requirements.txt</code> to install requirements and run
+          <code>python3 pong.py</code> to run the server.
+      </p>
+
+    <h2>Attribution</h2>
+
+      <p class="documentation">
+          Audio files from freemusicarchive.org and https://freesound.org . Fonts files from https://www.1001fonts.com/arcadeclassic-font.html .
+      </p>
+
         <button id="PongButton" class="float-left submit-button" >Go Back to Pong!</button>
 <script>
            document.getElementById("PongButton").onclick = function () {
