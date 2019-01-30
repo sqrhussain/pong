@@ -36,11 +36,11 @@
 </p>
 <h3>Application Technologies</h3>
 <p class="documentation">
-    The main technology in use is be HTML5 with javascript on the client side, following the Observer Pattern.
+    The main technology in use is HTML5 with javascript on the client side, following the Observer Pattern.
 
     In order to serve this frontend code we need a very basic web server. To display our game graphics we used canvas.
     As for the storage technology we used Local Storage to save the username.
-    Multiplayer communication is be done over WebSockets, for this we implemented a server in python 3 that takes care
+    Multiplayer communication is being done over WebSockets, for this we implemented a server in python 3 that takes care
     of relaying
     information between browsers.
     We used two HTML5 features on our website: Audio(several times over the website) and Web forms with placeholder
@@ -83,7 +83,6 @@
     <li>Ball position <code>{type:"ball", position:{x,y}, velocity:{x,y}}</code></li>
     <li>Paddle position <code>{type:"paddle", player:(0/1), y}</code></li>
     <li>Score <code>{type:"score", score:[s0,s1]}</code></li>
-    <li>Game start <code>{type:"gameStart", countdown:(3/2/1/0)}</code></li>
     <li>Game state <code>{type:"game_state", state:(waitingForPlayers/playing/gameEnd), win:(0/1)}</code></li>
     <li>Hit <code>{type:"hit", hitObject:("wall"/"paddle")}</code></li>
     <li>Names <code>{type:"names", player1, player2}</code></li>
