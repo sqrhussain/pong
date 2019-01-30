@@ -1,71 +1,73 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <link rel="stylesheet" href="css/docstyle.css" />
+    <link rel="stylesheet" href="css/docstyle.css"/>
     <title>Documentation</title>
-  </head>
-  <body>
-  <h1>WT - Project Report: Team Pong/Group 4</h1>
+</head>
+<body>
+<h1>WT - Project Report: Team Pong/Group 4</h1>
 <p>
 
-Irina Kremers
-1030087
-Irina.kremers@student.tugraz.at <br>
-Hussain Hussain
-11706436
-hussain@student.tugraz.at<br>
-Katharina Greimel
-00730158
-katharina.greimel@student.tugraz.at<br>
-Peter Grassberger
-01260680
-p.grassberger@student.tugraz.at<br>
+    Irina Kremers
+    1030087
+    Irina.kremers@student.tugraz.at <br>
+    Hussain Hussain
+    11706436
+    hussain@student.tugraz.at<br>
+    Katharina Greimel
+    00730158
+    katharina.greimel@student.tugraz.at<br>
+    Peter Grassberger
+    01260680
+    p.grassberger@student.tugraz.at<br>
 </p>
 <h2>Topic</h2>
-  <p class="documentation">
-Multiplayer Pong Game
-  </p>
-  <h2>Description</h2>
-    <p class="documentation">
-        We implemented the early arcade game “pong” with web technologies, to play in the browser. Instead of local
-        multiplayer like the original game, we are to be capable of online multiplayer from one web browser versus
-        another web browser, connected via a server. It is also possible to look up your current highscore after
-        playing the game, connected with your username.
-    </p>
-  <h3>Application Technologies</h3>
-      <p class="documentation">
-          The main technology in use is be HTML5 with javascript on the client side, following the MVC pattern.
+<p class="documentation">
+    Multiplayer Pong Game
+</p>
+<h2>Description</h2>
+<p class="documentation">
+    We implemented the early arcade game “pong” with web technologies, to play in the browser. Instead of local
+    multiplayer like the original game, we are to be capable of online multiplayer from one web browser versus
+    another web browser, connected via a server. It is also possible to look up your current highscore after
+    playing the game, connected with your username.
+</p>
+<h3>Application Technologies</h3>
+<p class="documentation">
+    The main technology in use is be HTML5 with javascript on the client side, following the MVC pattern.
 
- In order to serve this frontend code we need a very basic web server. To display our game graphics we used canvas.
-          As for the storage technology we used Local Storage to save the username.
-Multiplayer communication is be done over WebSockets, for this we implemented a server in python 3 that takes care of relaying
-          information between browsers.
-We used two HTML5 features on our website: Audio(several times over the website) and Web forms with placeholder
-          (on the start page for the playername).
+    In order to serve this frontend code we need a very basic web server. To display our game graphics we used canvas.
+    As for the storage technology we used Local Storage to save the username.
+    Multiplayer communication is be done over WebSockets, for this we implemented a server in python 3 that takes care
+    of relaying
+    information between browsers.
+    We used two HTML5 features on our website: Audio(several times over the website) and Web forms with placeholder
+    (on the start page for the playername).
 
-      </p>
-      <h2>How to run the game</h2>
+</p>
+<h2>How to run the game</h2>
 
-      <p class="documentation">
-          In the frontend folder open the index.html in the browser or use <code>python -m SimpleHTTPServer 8080</code>
-          and open http://localhost:8080 in your browser. In the server folder run
-          <code>pip3 install -r server/requirements.txt</code> to install requirements and run
-          <code>python3 pong.py</code> to run the server.
-      </p>
+<p class="documentation">
+    In the frontend folder open the index.html in the browser or use <code>python -m SimpleHTTPServer 8080</code>
+    and open http://localhost:8080 in your browser. In the server folder run
+    <code>pip3 install -r server/requirements.txt</code> to install requirements and run
+    <code>python3 pong.py</code> to run the server.
+</p>
 
-    <h2>Attribution</h2>
+<h2>Attribution</h2>
 
-      <p class="documentation">
-          Audio files from freemusicarchive.org and https://freesound.org . Fonts files from https://www.1001fonts.com/arcadeclassic-font.html .
-      </p>
+<p class="documentation">
+    Audio files from freemusicarchive.org and https://freesound.org . Fonts files from
+    https://www.1001fonts.com/arcadeclassic-font.html .
+</p>
 
-        <button id="PongButton" class="float-left submit-button" >Go Back to Pong!</button>
+<button id="PongButton" class="float-left submit-button">Go Back to Pong!</button>
 <script>
-           document.getElementById("PongButton").onclick = function () {
-       location.href = "index.html";
-        };
-        </script>
-    </body>
+    document.getElementById("PongButton").onclick = function () {
+        location.href = "index.html";
+    };
+</script>
+</body>
 </html>
