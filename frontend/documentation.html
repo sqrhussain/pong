@@ -77,6 +77,18 @@
     - README.md
     - protocol.md
 </pre>
+
+<h3>Web sockets messages</h3>
+<ol>
+    <li>Ball position <code>{type:"ball", position:{x,y}, velocity:{x,y}}</code></li>
+    <li>Paddle position <code>{type:"paddle", player:(0/1), y}</code></li>
+    <li>Score <code>{type:"score", score:[s0,s1]}</code></li>
+    <li>Game start <code>{type:"gameStart", countdown:(3/2/1/0)}</code></li>
+    <li>Game state <code>{type:"game_state", state:(waitingForPlayers/playing/gameEnd), win:(0/1)}</code></li>
+    <li>Hit <code>{type:"hit", hitObject:("wall"/"paddle")}</code></li>
+    <li>Names <code>{type:"names", player1, player2}</code></li>
+</ol>
+
 <h2>How to run the game</h2>
 
 <p class="documentation">

@@ -16,6 +16,9 @@ p {
     text-align: center;
     font-size: 20px;
 }
+ul, ol, pre {
+    font-size: 20px;
+}
 
 p.documentation {
     text-align: center;
