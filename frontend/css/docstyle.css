@@ -1,25 +1,33 @@
-h1   {color: black;
-        font-size: 80px;
-        text-align: center;
+h1 {
+    color: black;
+    font-size: 80px;
+    text-align: center;
 }
+
 h2 {
-text-align: center;
-}
-h3{
-text-align : center;
+    text-align: center;
 }
 
-p{
-text-align: center;
-font-size : 20px;
+h3 {
+    text-align: center;
 }
 
-p.documentation{
-text-align: center;
+p {
+    text-align: center;
+    font-size: 20px;
 }
 
-button{
-        margin: auto;
-        display: block;
-        font-size: 22px;
+p.documentation {
+    text-align: center;
+}
+
+button {
+    margin: auto;
+    display: block;
+    font-size: 22px;
+}
+
+img {
+    margin: 0 auto;
+    display: block;
 }
